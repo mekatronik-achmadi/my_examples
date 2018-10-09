@@ -1,0 +1,34 @@
+#For Builded Apps
+
+#To Extract
+~ Open *.exe or *.dll file with ResourcesHacker
+~ Save IconGroup as *.ico file
+
+#To Replace
+~ Open *.exe or *.dll file with ResourcesHacker
+~ Replace IconGroup with new *.ico file
+~ Save it
+
+#===================================================
+
+#For Qt-apps Building
+
+#To WindowIcon
+
+~ Replace WindowIcon properties on UI Form
+~ Choose File to browse new *.ico file
+~ Save and Build
+
+# To BuildedIcon
+
+~ Create new text file and contain this string :
+
+IDI_ICON1               ICON    DISCARDABLE     "<iconfilename>.ico"
+
+~ Save it as <iconresourcefilename>.rc
+
+~ Add to <projectname>.pro this string :
+
+RC_FILE += <iconresourcefilename>.rc
+
+~ Save and Build

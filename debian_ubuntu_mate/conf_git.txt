@@ -1,0 +1,42 @@
+# pengaturan program git
+# tutorial:
+# http://www.vogella.com/tutorials/Git/article.html
+# http://www.sitepoint.com/git-for-beginners/
+# http://rogerdudler.github.io/git-guide/
+
+# git commands
+git init # git-cola fail on this
+git clone /path/to/repository
+git clone username@host:/path/to/repository
+
+# remote server https://github.com/<account_name>/<project_name>.git
+# fetch and local-merge using FETCH_HEAD revision expression
+# ~/.gitconfig
+git config --global http.proxy http://achmadi10%40mhs.ep.its.ac.id:mekatro05@proxy.its.ac.id:8080
+git config --global https.proxy https://achmadi10%40mhs.ep.its.ac.id:mekatro05@proxy.its.ac.id:8080
+git config --global user.name "mekatronik-achmadi"
+git config --global user.email "mekatronik.achmadi@gmail.com"
+git config --global gui.editor geany
+git config --global color.ui 'auto'
+
+git status
+git diff <file>
+git diff <source_branch> <target_branch>
+git add <filename>
+git add -u
+git rm --cached [file_name]
+git commit -m "Commit message"
+
+git remote add origin <server>
+git remote add origin https://github.com/username/project.git
+git push <remote> <branch>
+git push origin master
+git push -u origin master
+
+git pull
+git fetch origin
+git merge master
+git reset --hard origin/master
+
+git log
+git show <hash_commit_hex_number>

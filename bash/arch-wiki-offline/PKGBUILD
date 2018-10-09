@@ -1,0 +1,20 @@
+pkgname=arch-wiki-offline
+pkgver=0.1
+pkgrel=1
+pkgdesc="arch linux wiki offline build script"
+arch=('any')
+url=("https://github.com/lahwaacz/arch-wiki-docs")
+license=('GPL')
+depends=('wget' 'arch-wiki-lite' 'python-simplemediawiki' 'python-lxml' 'python-cssselect')
+makedepends=('git')
+options=('!makeflags')
+source=("$pkgname::git+https://github.com/mekatronik-achmadi/arch-wiki-offline")
+sha256sums=('SKIP')
+
+package() {
+	cd "$srcdir/$pkgname"
+
+	install -d $pkgdir/usr/share/arch-wiki-offline
+	mv -f ./arch-wiki-docs.py $pkgdir/usr/share/arch-wiki-offline
+	mv -f ./ArchWiki $pkgdir/usr/share/arch-wiki-offline
+}

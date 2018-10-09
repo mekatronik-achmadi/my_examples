@@ -1,0 +1,1 @@
+gcc -v -v -Wall -o webkitgtk main.c $(pkg-config --cflags --libs gtk+-2.0 --libs webkit-1.0)

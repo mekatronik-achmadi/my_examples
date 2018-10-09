@@ -1,0 +1,20 @@
+.
+/opt/stm32lib/chibios30/os/hal/boards/ST_STM32F4_DISCOVERY
+/opt/stm32lib/chibios30/os/hal/ports/STM32/STM32F4xx
+/opt/stm32lib/chibios30/os/hal/include
+/opt/stm32lib/chibios30/os/hal/lib/streams
+/opt/stm32lib/chibios30/os/hal/osal/rt
+/opt/stm32lib/chibios30/os/rt/include
+/opt/stm32lib/chibios30/os/various
+/opt/stm32lib/chibios30/ext/fatfs/src
+
+#.
+#../ChibiOS_3.0.5/os/hal/boards/ST_STM32F4_DISCOVERY
+#../ChibiOS_3.0.5/os/hal/ports/STM32/STM32F4xx
+#../ChibiOS_3.0.5/os/hal/include
+#../ChibiOS_3.0.5/os/hal/lib/streams
+#../ChibiOS_3.0.5/os/hal/osal/rt
+#../ChibiOS_3.0.5/os/rt/include
+#../ChibiOS_3.0.5/os/various
+#../ChibiOS_3.0.5/ext/fatfs/src
+#C:\Program Files (x86)\GNU Tools ARM Embedded\5.3 2016q1\arm-none-eabi\include

@@ -1,0 +1,134 @@
+[com.ubuntu.update-manager]
+show-details=true
+show-versions=true
+
+[org.gnome.crypto.pgp]
+keyservers=['hkp://keyserver.ubuntu.com:11371', 'hkp://pool.sks-keyservers.net', 'ldap://keyserver.pgp.com']
+
+[org.gnome.desktop.interface]
+cursor-theme='mate'
+document-font-name='Sans 8'
+font-name='Sans 8'
+monospace-font-name='Monospace 8'
+
+[org.gnome.desktop.wm.preferences]
+titlebar-font='Sans Bold 8'
+
+[org.gnome.rhythmbox.encoding-settings]
+media-type-presets={'audio/x-vorbis':'Ubuntu', 'audio/mpeg':'Ubuntu'}
+
+[org.gnome.rhythmbox.rhythmdb]
+monitor-library=true
+
+[org.gnome.rhythmbox.plugins]
+active-plugins=['artsearch', 'audiocd','audioscrobbler','cd-recorder','daap','dbus-media-server','generic-player','ipod','iradio','mmkeys','mpris','mtpdevice','notification','power-manager']
+
+[org.gnome.Charmap]
+font='Sans 8'
+
+[org.gnome.DejaDup]
+backend='file'
+
+[org.mate.applications-at-mobility]
+exec='onboard'
+
+[org.mate.applications-at-visual]
+exec='orca'
+
+[org.mate.background]
+picture-filename='/usr/share/backgrounds/ubuntu-mate-utopic/Ubuntu-Mate-Dark-no-logo.jpg'
+
+[org.mate.caja.desktop]
+font='Sans 8'
+volumes-visible=false
+trash-icon-visible=false
+network-icon-visible=false
+home-icon-visible=false
+computer-icon-visible=false
+
+[org.mate.caja.preferences]
+default-sort-order='type'
+show-icon-text='never'
+
+[org.mate.dictionary]
+print-font='Sans 8'
+
+[org.mate.font-rendering]
+antialiasing = 'rgba'
+hinting = 'slight'
+
+[org.mate.interface]
+font-name='Sans 8'
+document-font-name='Sans 8'
+monospace-font-name='Monospace 8'
+toolbar-icons-size='small-toolbar'
+
+[org.mate.Marco.general]
+compositing-manager=false
+side-by-side-tiling=true
+center-new-windows=true
+titlebar-font='Sans Bold 8'
+
+[org.mate.Marco.global-keybindings]
+run-command-terminal='<Control><Alt>t'
+switch-panels='disabled'
+switch-windows='<Alt>Tab'
+switch-windows-all='<Control><Alt>Tab'
+switch-windows-all-backward='<Control><Alt><Shift>Tab'
+switch-windows-backward='<Alt><Shift>Tab'
+panel-main-menu='Super_L'
+
+[org.mate.panel]
+default-layout='default'
+
+[org.mate.peripherals-mouse]
+cursor-theme='mate'
+
+[org.mate.peripherals-touchpad]
+disable-while-typing=true
+tap-to-click=true
+
+[org.mate.pluma]
+color-scheme='classic'
+display-line-numbers=true
+display-right-margin=true
+highlight-current-line=true
+editor-font='Monospace 8'
+print-font-body-pango='Monospace 8'
+print-font-header-pango='Sans 8'
+print-font-numbers-pango='Sans 8'
+tabs-size=8
+
+[org.mate.power-manager]
+action-critical-battery='suspend'
+button-lid-ac='suspend'
+button-lid-battery='suspend'
+button-power='interactive'
+button-suspend='suspend'
+icon-policy='always'
+idle-dim-ac=true
+sleep-computer-ac=1800
+sleep-computer-battery=1800
+sleep-display-ac=600
+spindown-enable-ac=true
+
+[org.mate.screensaver]
+mode='single'
+themes=['screensavers-footlogo-floaters']
+
+[org.mate.sound]
+theme-name='freedesktop'
+event-sounds=false
+input-feedback-sounds=true
+
+[org.mate.SettingsDaemon.plugins.media-keys]
+magnifier='<Alt><Mod4>m'
+screenreader='<Alt><Mod4>s'
+on-screen-keyboard='<Alt><Mod4>k'
+
+[org.mate.terminal.profile]
+allow-bold=false
+use-system-font=true
+
+[org.yorba.shotwell.printing]
+titles-font='Sans 8'

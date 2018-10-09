@@ -1,0 +1,20 @@
+pkgname=stdlib-stm32
+pkgver=0.1
+pkgrel=1
+pkgdesc="Standard Peripheral Library for STM32Fx-series"
+arch=('any')
+url="http://www.st.com/"
+license=('custom')
+depends=
+makedepends=
+options=('!makeflags' 'libtool' 'staticlibs' '!strip')
+source=(stm32f10x.zip::http://www.st.com/st-web-ui/static/active/en/st_prod_software_internet/resource/technical/software/firmware/stsw-stm32054.zip)
+sha256sums=('5777498166c3f297426c3fb41067719bba1fc059225d0cffdb20fb997687bf05')
+
+package() {
+	cd "$srcdir"
+	unzip -qqo stm32f10x.zip
+	install -d $pkgdir/opt/stm32_stdperiph
+	mv -f $srcdir/STM32* $pkgdir/opt/stm32_stdperiph
+	chmod -Rf 755 $pkgdir/opt/stm32_stdperiph
+}

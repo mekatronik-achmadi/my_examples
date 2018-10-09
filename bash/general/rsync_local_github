@@ -1,0 +1,3 @@
+#!/bin/bash
+
+# rsync -avh --delete --exclude '.git' --exclude 'RECAV' --exclude 'tugas_akhir' /home/achmadi/development/Projects/ /run/media/achmadi/linux_data/Repository/LocalGithub

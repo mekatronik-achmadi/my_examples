@@ -1,0 +1,563 @@
+# skrip untuk menampilkan paket-paket yang sering dibutuhkan terutama untuk kebutuhan belajar programming
+# paket setelah tanda # (tanda pagar) adalah paket non-official
+
+# daftar paket-paket yang sering dibutuhkan
+
+#====== Shell ====== 
+ubuntu-minimal ubuntu-standard
+linux-image-amd64 linux-image-generic
+linux-headers-amd64 linux-headers-generic
+initramfs-tools
+sysvinit sysvinit-utils sysv-rc
+systemd systemd-shim systemd-sysv
+libc6 libc6-dev libc-bin libc-dev-bin
+bash
+base-files
+command-not-found
+util-linux
+bsdmainutils bsdutils
+coreutils
+debianutils
+findutils
+usbutils
+pm-utils
+klibc-utils
+cups
+dbus
+file
+gawk
+grep
+htop
+info
+kmod
+less
+pv
+login
+man-db
+mlocate
+ncurses-bin
+adduser
+hostname
+passwd
+whois
+procps
+psmisc
+sysstat
+iotop
+lsof
+screen
+sudo
+udev
+upower
+upstart
+bluez
+hdparm
+e2fsprogs
+ntfs-3g ntfsprogs
+dosfstools mtools
+gddrescue
+mc
+tree
+tmux
+moc
+mplayer2
+lsb-release
+alsa-utils alsamixergui
+pulseaudio-utils pavucontrol
+fontconfig
+nano vim
+at cron cronutils
+rename
+strace
+cup
+dstat
+tasksel
+language-pack-en-base
+
+#====== Firmware ====== 
+firmware-linux-free linux-firmware
+firmware-atheros
+bluez-firmware
+ubuntu-drivers-common
+
+#====== Library ====== 
+libc6
+libc6-dev
+libftdi-dev
+libgl1-mesa-dev
+libudev-dev
+libudev1
+libusb-0.1-4
+libusb-1.0-0-dev
+libopencv-dev
+#
+opencv
+
+#====== Packager ====== 
+apt
+apt-offline-gui
+apt-transport-https
+dpkg
+dpkg-dev
+fakeroot
+inxi
+lintian
+aptitude
+gnupg
+#
+debman
+
+#====== Archiver ====== 
+bzip2
+gzip
+rsync
+tar
+unrar
+zip
+
+#====== Electronic ====== 
+gcc-avr
+avr-libc
+avrdude
+gdb-avr
+eagle
+kicad
+geda geda-utils
+gcc-arm-none-eabi
+libnewlib-arm-none-eabi
+libnewlib-dev
+stm32flash
+gdb-arm-none-eabi
+#
+st-link
+stm32-microXplorer
+stm32flash-usart
+
+#====== Compiler ====== 
+build-essential
+automake
+autogen
+autoconf
+libtool-bin
+cmake-qt-gui
+dh-autoreconf
+g++
+gcc
+gdb
+make
+pkg-config
+intltool
+binwalk
+
+#====== GUI ====== 
+xinit
+xauth
+xorg
+xserver-xorg
+xserver-xorg-input-all
+xserver-xorg-video-all
+lightdm lightdm-gtk-greeter
+lightdm-gtk-greeter-settings
+
+#====== Qt4 ====== 
+qtcreator
+libqt4-dev
+libqt4-opengl-dev
+libqt4-svg
+libqt4-test
+libqtcore4
+libqtgui4
+libqtcore4
+libqtgui4
+libqtwebkit-dev
+qt4-dev-tools
+qt4-designer
+qt4-qmake
+qt4-default
+libphonon-dev
+libqwt-dev
+libqwt5-qt4-dev
+libqwtplot3d-qt4-dev
+qt4-qtconfig
+#
+qextserialport
+qserialterm
+
+#====== Qt5 ====== 
+libqt5concurrent5
+libqt5core5a
+libqt5gui5
+libqt5test5
+libqt5widgets5
+libqt5svg5-dev
+libqt5opengl5-dev
+libqt5webkit5-dev
+libqt5serialport5-dev
+qt5-default
+qt5-qmake
+qtbase5-dev
+qtbase5-dev-tools
+qttools5-dev
+libphonon4qt5-dev
+libqwt-qt5-dev
+#
+qwt
+qtserialterminal
+
+#====== Gtk2 ====== 
+monodevelop
+glade-gnome glade-gtk2
+libglade2-0
+libglade2-dev
+libgtk2.0-dev
+libgtkmm-2.4-dev
+gir1.2-gtk-2.0
+libwebkitgtk-dev
+libgtksourceview2.0-0
+libgtk2.0-cil-dev
+gtk2-engines gtk2-engines-xfce
+gtk2-engines-murrine gtk2-engines-pixbuf
+gtk2-engines-aurora gtk2-engines-cleanice
+gtk2-engines-nodoka gtk2-engines-wonderland
+gtk-clearlooks-gperfection2-theme
+
+#====== Gtk3 ====== 
+anjuta anjuta-extras
+gnome-devel
+glade
+libgtk-3-dev
+libgtkmm-3.0-dev
+gir1.2-gtk-3.0
+libwebkitgtk-3.0-dev
+libgtksourceview-3.0-1
+libgtk3.0-cil-dev
+gnome-themes-standard
+gtk3-engines-unico gtk3-engines-xfce
+clearlooks-phenix-theme
+
+#====== Python ====== 
+python
+python-serial
+python-opencv
+python-numpy
+python-guiqwt
+python-gtk2
+python-glade2
+python-gi
+python-gobject
+python-caja
+python-pycurl
+pyqt4-dev-tools
+python-qt4-gl
+python-pyside
+
+#====== Python3 ====== 
+python3
+python3-serial
+python3-gi
+python3-pycurl
+python3-pyside
+python3-pyqt5.qtopengl
+python3-pyqt5.qtquick
+python3-pyqt5.qtserialport
+python3-pyqt5.qtsvg
+pyqt5-dev-tools
+
+#====== Scientific ====== 
+gnuplot
+gnuplot-nox
+gnuplot-qt
+gnuplot-x11
+libgnuplot-iostream-dev
+octave
+octave-image
+octave-signal
+liboctave-dev
+libfltk1.3-dev
+libv4l-dev
+#
+instrument-control
+image-acquisition
+io
+
+#====== Java ====== 
+default-jdk openjdk-7-jdk
+default-jre openjdk-7-jre
+icedtea-plugin icedtea-7-plugin
+icedtea-netx
+ant ant-optional
+#
+jdk-linux
+jre-linux
+android_ndk
+android_sdk
+intellij
+netbeans
+
+#====== Project ====== 
+diffutils
+git-cola gitg git-gui
+qgit gitk gitk
+patch
+sed
+
+#====== Emulator ====== 
+wine wine1.6
+winetricks
+winbind
+wine-gecko2.21 wine-mono0.0.8
+gnome-exe-thumbnailer
+playonlinux
+qemu qemu-system-arm
+virtualbox-qt
+#
+wine1.7
+genymotion
+
+#====== WINE-NATIVE-WIN7 ====== 
+riched20
+mdac27
+mdac28
+dotnet20
+msxml4
+vcrun2005
+vcrun2008
+wsh57
+
+#====== LAMP ====== 
+apache2
+libapache2-mod-php5
+mysql-server
+mysql-workbench
+php5
+php5-cli
+php5-curl
+php5-mysql
+libqt5sql5-mysql
+
+#====== Networking ====== 
+ftp
+iputils-ping
+iputils-tracepath
+iputils-arping
+iputils-clockdiff
+mtr-tiny mtr traceroute iproute2
+net-tools
+wireless-tools
+samba smbclient smbc
+cifs-utils
+wvdial
+wget
+curl
+socat
+tcpdump
+ucspi-tcp
+netcat
+netcat-openbsd
+nmap
+nload
+telnet
+nfs-common
+dnsutils
+talk
+ssh
+bind9-host
+aircrack-ng
+
+#====== Document ====== 
+texlive latex2html latex2rtf
+kile texstudio gummi
+libreoffice libreoffice-gnome
+libreoffice-base
+libreoffice-calc
+libreoffice-impress
+libreoffice-writer
+freeplane vym
+freemind freemind-plugins-svg
+#
+wps-office
+
+#====== MediaLibrary ====== 
+imagemagick
+lame libmp3lame0
+gstreamer0.10-plugins-ugly gstreamer0.10-plugins-bad gstreamer0.10-plugins-good
+gstreamer0.10-fluendo-mp3
+gstreamer0.10-ffmpeg ffmpegthumbnailer
+gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly
+gstreamer1.0-fluendo-mp3
+gstreamer1.0-libav
+
+#====== LiveDVD ====== 
+debootstrap
+squashfs-tools
+genisoimage
+gfxboot-dev
+libfribidi-bin
+lzma
+mktemp
+live-boot casper lupin-casper
+syslinux syslinux-efi syslinux-common syslinux-utils
+isolinux
+extlinux
+efibootmgr
+grub-pc grub-efi grub-common grub-imageboot
+unetbootin
+
+#====== Islamic ====== 
+minbar itools
+hijra-applet python-hijra
+thawab
+zekr
+othman python-othman
+monajat python-monajat
+libitl-dev libitl-gobject-dev python-gst0.10-dev python-gst-1.0
+fonts-hosny-amiri fonts-arabeyes xfonts-intl-arabic
+language-pack-ar
+#
+sabily-example-content sabily-wallpapers
+
+#====== UbuntuInstaller ====== 
+software-properties-gtk
+ubiquity ubiquity-casper ubiquity-slideshow-ubuntu-mate
+usb-creator-gtk
+
+#====== Fun ====== 
+sl
+steam
+cowsay 
+fortune
+desmume
+lolcat
+cmatrix
+
+#====== ResourceHungry ====== 
+kubuntu-driver-manager
+apt-xapian-index
+lightdm-kde-greeter gdm3 kdm
+kde-style-oxygen-qt4
+kde-style-oxygen-qt5
+gtk2-engines-oxygen
+gtk3-engines-oxygen
+libreoffice-kde
+ubiquity-frontend-gtk ubiquity-frontend-kde
+usb-creator-kde
+gnome-control-center cinnamon-control-center systemsettings
+gnome-terminal konsole yakuake
+gnome-system-monitor ksysguard
+libcinnamon-menu-3-0
+gnome-screenshot ksnapshot
+notification-daemon
+polkit-kde-1
+kde-config-gtk-style
+gnome-tweak-tool
+plasma-theme-oxygen
+kde-window-manager muffin mutter compiz
+kate kwrite kdevelop
+nemo dolphin nautilus
+gnome-commander krusader
+kdesudo
+nautilus-open-terminal
+gnome-user-share kdenetwork-filesharing
+okular
+kmenuedit
+file-roller ark
+plasma-nm
+kcalc
+gnome-bluetooth bluetooth bluedevil
+amarok
+gnome-mplayer
+dragonplayer kaffeine
+krita
+karbon
+kchmviewer
+okteta
+gnome-disk-utility partitionmanager
+cheese kamoso
+korganizer kwalletmanager
+#
+ksuperkey
+
+#====== LinuxMint ====== 
+mintsystem
+mintwifi
+mintstick
+mintsources
+mintmenu
+mintlocale
+mintinstall
+mintdesktop
+mint-common
+mint-meta-mate
+mint-mirrors
+mint-user-guide-mate
+mint-search-addon
+mint-translations
+mint-meta-codecs
+mint-mdm-themes
+mint-themes mint-themes-gtk3
+
+#====== DesktopEnvironment ====== 
+ubuntu-mate-desktop mate-desktop-environment-core mate-desktop-environment xfce4 lxde
+mate-panel mate-applets xfce4-panel lxpanel
+mate-session-manager xfce4-session lxsession
+mate-control-center xfce4-settings lxqt-config
+mate-terminal xfce4-terminal xterm lxterminal qterminal tilda
+mate-system-monitor xfce4-taskmanager lxtask
+mate-menus mate-menu mate-gnome-main-menu-applet xfce4-whiskermenu-plugin
+mate-power-manager xfce4-power-manager lxqt-powermanagement
+mate-utils wmctrl xfce4-screenshooter scrot shutter
+mate-notification-daemon xfce4-notifyd lxqt-notificationd notification-daemon
+mate-polkit lxqt-policykit policykit-1-gnome
+mate-system-tools hardinfo sysinfo screenfetch arandr lxrandr lxqt-qtplugin nitrogen
+mate-themes lxappearance
+ubuntu-mate-artwork ubuntu-mate-lightdm-theme ubuntu-artwork sabily-themes ubuntume-themes
+mate-tweak ubuntu-mate-default-settings ubuntu-mate-lightdm-theme
+mate-media xfce4-mixer
+mate-screensaver xscreensaver
+mate-icon-theme mate-icon-theme-faenza adwaita-icon-theme-full
+marco xfwm4 openbox metacity icewm fluxbox awesome
+zenity
+gnome-calculator mate-calc galculator qalculate-gtk
+xconf obconf obconf-qt
+dconf-cli dconf-editor gconf2 gconf-editor
+pluma leafpad juffed mousepad gedit
+geany geany-plugins codeblocks codeblocks-contrib codelite codelite-plugins
+caja pcmanfm pcmanfm-qt thunar xfe
+catfish xfce4-appfinder tracker nepomuk
+tuxcmd doublecmd-gtk doublecmd-qt
+caja-gksu gksu
+caja-open-terminal
+caja-share gigolo mate-user-share vino gvncviewer
+eom ristretto gpicview lximage-qt eog gthumb gwenview
+atril evince xpdf pdftk
+mozo menulibre alacarte
+engrampa xarchiver
+mate-desktop desktop-base xfdesktop4
+firefox midori chromium-browser iceweasel epiphany-browser
+flashplugin-downloader pepperflashplugin-nonfree gnash
+network-manager wicd network-manager-gnome
+blueman
+lxmusic audacious rhythmbox banshee gmusicbrowser clementine
+quodlibet quodlibet-plugins exfalso
+vlc totem parole
+gimp mtpaint
+inkscape
+gtkterm cutecom brltty
+xchm
+ghex
+gparted
+brasero xfburn k3b
+guvcview uvccapture uvcdynctrl
+xsane simple-scan
+cairo-dock docky plank
+orage
+seahorse
+apport apport-gtk python3-apport
+ttf-ubuntu-font-family fonts-ubuntu-font-family-console
+#
+humanity-colors
+mate-calc
+winusb
+cnijfilter
+adobe-flashplugin
+firefox chrome-browser

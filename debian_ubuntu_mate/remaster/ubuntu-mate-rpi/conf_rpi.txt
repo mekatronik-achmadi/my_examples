@@ -1,0 +1,46 @@
+# skrip ini untuk menampilkan pengaturan dasar pada OS on RaspberryPi
+
+# daftar variabel config.txt pengganti BIOS
+echo "
+hdmi_force_hotplug=1
+hdmi_drive=2
+hdmi_group=2
+hdmi_mode=9
+" > /boot/config.txt
+
+# skrip pengaturan untuk shell via ssh eth0 raspberrypi
+echo "list of UP IP ADDRESS" > ip_up.lst
+IFS=. read -a addr <<<"$(ifconfig | awk '/inet addr:192/{gsub(/inet addr:/,""); print $1}')"
+IFS=. read -a addr <<<"$(ifconfig | awk '/inet addr:10/{gsub(/inet addr:/,""); print $1}')"
+lanaddress=${addr[0]}.${addr[1]}.${addr[2]}
+echo this is your lanaddress $lanaddress
+for ip in $(seq 1 254);do
+	ping -c 1 -w 1 $lanaddress.$ip > /dev/null
+	if [[ $? -eq 0 ]]; then
+		echo \"$lanaddress.$ip UP\"
+		echo \"$lanaddress.$ip UP\" >> ip_up.lst
+	else
+		echo \"$lanaddress.$ip DOWN\"
+	fi
+done
+
+# pengaturan built-in raspbian
+raspi-config
+
+echo -e "XKBLAYOUT=\"us\" " >> /etc/default/keyboard
+
+echo -e "
+<keybind key=\"C-A-t\">
+<action name=\"Execute\"><command>lxterminal</command></action>
+</keybind>
+" > ~/.config/openbox/lxde-rc.xml
+
+echo "#1:2345:respawn:/sbin/getty 115200 tty1" >> /etc/inittab
+
+echo "1:2345:respawn:/bin/login -f pi tty1 </dev/tty1 >/dev/tty1 2>&1" >> /etc/inittab
+
+echo "su -l pi -c startx" >> /etc/rc.local
+
+sudo ddrescue --force ubuntu-mate-15.04-desktop-armhf-raspberry-pi-2.img /dev/mmcblk0
+sudo ddrescue --force /dev/mmcblk0 ubuntu-mate-rpi-custom.img
+

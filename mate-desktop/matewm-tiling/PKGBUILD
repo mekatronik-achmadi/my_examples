@@ -1,0 +1,45 @@
+pkgname=matewm-tiling
+pkgdesc="MATE-Tiling using AwesomeWM"
+pkgver=0.1
+pkgrel=1
+arch=('any')
+url='http://mate-desktop.org'
+install=pkg.install
+license=('custom')
+groups=('mate-extra')
+depends=(
+	'lightdm'
+	'lightdm-gtk-greeter'
+	'mate-panel'
+	'mate-session-manager'
+	'awesome')
+source=('matewm-tiling_badge-symbolic.svg'
+	'awesome_badge-symbolic.svg'
+	'matewm-tiling.desktop'
+	'matewm-tiling-session'
+	'matewm-tiling.layout'
+	'matewm-tiling.png'
+	'matewm-tiling.lua'
+	)
+md5sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+
+package() {
+	install -d $pkgdir/usr/share/icons/hicolor/scalable/places/
+	install -Dm644 awesome_badge-symbolic.svg $pkgdir/usr/share/icons/hicolor/scalable/places/
+	install -Dm644 matewm-tiling_badge-symbolic.svg $pkgdir/usr/share/icons/hicolor/scalable/places/
+
+	install -d $pkgdir/usr/share/awesome/themes/default/
+	install -Dm644 matewm-tiling.png $pkgdir/usr/share/awesome/themes/default/
+
+	install -d $pkgdir/usr/share/xsessions/
+	install -Dm644 matewm-tiling.desktop $pkgdir/usr/share/xsessions/
+
+	install -d $pkgdir/usr/bin/
+	install -Dm755 matewm-tiling-session $pkgdir/usr/bin/
+
+	install -d $pkgdir/etc/xdg/awesome/
+	install -Dm644 matewm-tiling.lua $pkgdir/etc/xdg/awesome/
+
+	install -d $pkgdir/usr/share/mate-panel/layouts/
+	install -Dm644 matewm-tiling.layout $pkgdir/usr/share/mate-panel/layouts/
+}

@@ -1,0 +1,439 @@
+# perintah-perintah pengaturan umum
+
+# perintah bash dalam satu line interpretasi
+# diketik di terminal langsung tanpa shell script
+bash -c "commandline"
+sudo bash -c "commandline"
+sudo bash -c "commandline1 && commandline2"
+sudo bash -c "echo \"string \\\"quoted_string\\\";\" >> /filepath"
+
+# file untuk bash startup-login
+ls /etc/skel/.bash_logout
+ls /etc/skel/.bashrc
+ls /etc/skel/.profile
+cp -vf /etc/skel/.* ~
+sudo cp -vf /etc/skel/.* /root
+
+# custom prompt
+PS1='${debian_chroot:+($debian_chroot)}\n\[\033(0\]l\[\033(B\][$(pwd)]\n\[\033(0\]m\[\033(B\]\[\033(0\]q\[\033(B\](\u@\h):\$ '
+sudo nano /etc/skel/.bashrc
+
+# pindah root-system dalam 1 shell session
+sudo bin/sh -i
+sudo chroot <new-root>
+sudo chroot <new-root> <command>
+
+# menjalankan bash script
+# script dengan hak execute
+# baris pertama memiliki #!/bin/bash
+./script.sh
+/usr/bin/script.sh
+
+# menjalankan file teks yang memiliki perintah-perintah bash
+# file teks tanpa hak execute
+# baris pertama tanpa #!/bin/bash
+bash file.txt
+. ./file.txt
+
+# login sebagai root
+su
+sudo su
+exit
+
+# mengatur environment variable
+printenv
+printenv HOME
+echo $HOME
+set
+export variable="value"
+alias
+source file_input
+sudo --preserve-env <command>
+gksu --preserve-env <command>
+
+# pengaturan unicode
+# atau bisa dengan login set unicode yang berbeda dari sebelumnya
+locale
+locale -a
+locale -av
+export LC_ALL=C
+export LC_ALL=C.UTF-8
+export LANG=en_US.utf8
+export LANGUAGE=en_US
+export PYTHONIOENCODING=utf8
+
+# setting tanggal dan jam
+date -s "yyyymmdd hh:mm"
+
+# fix time stamp problems
+touch <file_name>
+
+# fix owner and permission problems
+chown -Rvf 1000:1000 <filenames>
+chown -Rvf $(id -u):$(id -g) <filenames>
+chmod -Rvf a+r <filenames>
+chmod -Rvf g+x <filenames>
+chmod -Rvf o-w <filenames>
+chmod -Rvf 765 <filenames>
+
+# file dan folder tempat pengaturan dari username
+# menghapusnya akan mereset pengaturan tingkat user
+# instal ulang akan mereset pengaturan tingkat root
+ls /home/username/.*
+
+# pisahkan partisi /home dan /
+# pisahkan folder user dan folder development
+# ID 0 for root and ID 1000 for user
+mkdir /home/development
+chown -rvf username:username /home/development
+chown -rvf ID:ID /home/development
+ln -svf /home/development /home/username/development
+
+# install adobe_flash_player pada firefox
+cd ./install_flash_player_11_linux.x86_64/
+cp -rvf ./usr /
+cp -vf ./libflashplayer.so /usr/lib/firefox-addons/plugins/
+
+# install qtserialterminal dari sourcescode
+cd ~/Makes/qtserialterminal/
+ln -svf /lib/x86_64-linux-gnu/libudev.so.1 /usr/lib/libudev.so
+qmake
+make
+cp -arvf ./qtserialterminal /usr/bin
+
+# membuat virtual serial port
+socat PTY PTY
+socat PTY,link=/dev/ttyS2 PTY,link=/dev/ttyS2
+socat pty,raw,echo=0 pty,raw,echo=0
+socat /dev/YOURPORT,raw,echo=0,bHEREBAUDRATE /dev/YOURPORT,raw,echo=0,bHEREBAUDRATE
+socat tcp-l:5760 /dev/YOURPORT,raw,echo=0,bHEREBAUDRATE
+lsof -c socat
+
+# install qwt-6.1.0 dari sourcescode
+cd ~/Makes/qwt-6.1.0/
+qmake
+make
+make install
+ln -svf /usr/local/qwt-6.1.0/lib/libqwt.so.6 /usr/lib/libqwt.so
+
+# install st-link dari sourcescode
+cd ~/Makes/stlink-master/
+./autogen.sh
+./configure
+make
+make install
+cp -arvf ./stlink_v1.modprobe.conf /etc/modprobe.d/
+
+# install st-flash-uart dari sourcescode
+cd ~/Makes/stm32flash-uart1/
+make
+make install
+
+# perintah untuk membantu kompilasi dari sourcescode
+-I/include-folder
+-L/lib-folder
+libname.so
+ld --verbose -lname
+ldd ./appname
+
+# membuat fstab untuk mount-point
+fdisk -l
+ls -l /dev/disk/by-uuid
+echo "#UNCONFIGURED FSTAB FOR BASE SYSTEM" > /etc/fstab
+echo "# <filesystem> <mount point> <type> <options> <dump> <pass>" >> /etc/fstab
+echo "" >> /etc/fstab
+echo "proc /proc proc defaults 0 0" >> /etc/fstab
+echo "UUID=871ad244-5d07-4b02-acc3-bfa33a329c2a none swap sw 0 0" >> /etc/fstab
+echo "UUID=a94fdd02-5988-4828-8436-af1780b14482 /home ext4 defaults 0 0" >> /etc/fstab
+echo "UUID=3ccb63f2-0289-4839-be2f-21ea021e645d / ext4 defaults 0 0" >> /etc/fstab
+
+# partisi hardisk via terminal
+fdisk /dev/sda
+mkfs.ext4 /dev/sda1
+mkswap /dev/sda2
+swapon /dev/sda2
+
+# mengatur grub agar tidak menampilkan animasi plymouth
+nano /etc/default/grub
+echo "GRUB_DEFAULT=0"
+echo "GRUB_TIMEOUT=10"
+echo -e "#GRUB_CMDLINE_LINUX_DEFAULT=\"quiet splash\""
+update-grub
+nano /boot/grub/grub.cfg
+echo "current setting will frozen for overwrited grub loader by another"
+
+# CUPS from browser
+echo "http://localhost:631"
+
+# sudo dan gksu tanpa meminta password
+echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+sudo visudo
+
+# pembuatan user dan passwordnya
+passwd root
+/usr/sbin/adduser user
+adduser user
+passwd user
+
+# pengaturan user dan grup sudo
+su
+gpasswd -a username sudo
+xhost SI:localuser:root
+exit
+
+# file penyimpan informasi akun
+nano /etc/passwd
+nano /etc/shadow
+nano /etc/group
+
+# runlevel for SysV only
+echo "id:2:initdefault:" > /etc/inittab
+init [runlevel_number]
+
+# boot commands
+# /etc/grub/grub.cfg
+linux /boot/vmlinuz-3.16.0-4-amd64 root=UUID=4923f9a3-206f-43a0-9d7f-36a7c7cf8b2e ro initrd=/install/initrd.gz quiet
+initrd /boot/initrd.img-3.16.0-4-amd64
+# /etc/grub/grub.cfg using single cpu
+linux /boot/vmlinuz-3.16.0-4-amd64 root=UUID=4923f9a3-206f-43a0-9d7f-36a7c7cf8b2e ro initrd=/install/initrd.gz quiet maxcpus=1
+initrd /boot/initrd.img-3.16.0-4-amd64
+# /etc/grub/grub.cfg with systemd
+linux /boot/vmlinuz-3.16.0-4-amd64 root=UUID=4923f9a3-206f-43a0-9d7f-36a7c7cf8b2e ro initrd=/install/initrd.gz init=/bin/systemd quiet
+initrd /boot/initrd.img-3.16.0-4-amd64
+# lilo (linux loader or syslinux)
+Boot: /live/vmlinuz initrd=/live/initrd.img boot=live config quiet splash
+
+# pengaturan lightdm
+# /etc/lightdm/lightdm.conf
+# /etc/lightdm/lightdm-gtk-greeter-ubuntu-mate.conf
+# greeter-session from /usr/share/xgreeters/lightdm-gtk-greeter.desktop
+# user-session from /usr/share/xsessions/mate.desktop
+[SeatDefaults]
+user-session=mate
+greeter-session=lightdm-gtk-greeter
+allow-guest=false
+autologin-user=username
+autologin-user-timeout=0
+
+# mengatur program autostart
+ls /etc/init
+ls /etc/init.d
+nano /etc/rc.local
+update-rc.d /etc/init.d/appname.sh default
+ls /etc/xdg/autostart
+ls ~/.config/autostart/
+
+# disable ubuntu crash report (apport)
+echo "enabled=0" > /etc/default/apport
+rm -vf /var/crash/*
+
+# disable service yang tidak dibutuhkan
+sudo systemctl disable apport
+sudo /etc/init.d/apport stop
+sudo systemctl disable mysql
+sudo /etc/init.d/mysql stop
+sudo systemctl disable apache2
+sudo /etc/init.d/apache2 stop
+
+# file pengaturan menu
+nano /usr/share/applications/appname.desktop
+
+# isi format *.desktop
+[Desktop Entry]
+Categories=
+Comment=
+Exec=
+GenericName=
+Icon=
+MimeType=
+Name=
+Type=
+Terminal=
+#TryExec=
+#AutostartCondition
+
+# sharing samba configuration
+# /etc/samba/smb.conf
+[<shared_folder_name>]
+path = /home/<user_name>/<shared_folder_name>
+available = yes
+valid users = <user_name>
+read only = no
+browseable = yes
+public = yes
+writable = yes
+
+# sharing samba folder via terminal
+# The default user group of samba is "WORKGROUP".
+ifconfig eth0 up 192.168.56.5
+smbpasswd -a <user_name>
+mkdir /home/<user_name>/<shared_folder_name>
+service smbd restart
+testparm
+
+# wifi config files
+ls /etc/NetworkManager/system-connections/
+
+# pengaturan proxy untuk wget dan winetricks
+# /etc/wgetrc
+https_proxy = https://achmadi10%40mhs.ep.its.ac.id:mekatro05@proxy.its.ac.id:8080
+http_proxy = http://achmadi10%40mhs.ep.its.ac.id:mekatro05@proxy.its.ac.id:8080
+ftp_proxy = ftp://achmadi10%40mhs.ep.its.ac.id:mekatro05@proxy.its.ac.id:8080
+
+# pengaturan program modem wvdial
+# /etc/wvdial.conf
+[Dialer smart]
+Init1 = ATZ
+Init2 = ATQ0 V1 E1 S0=0 &C1 &D2 +FCLASS=0
+Modem Type = USB Modem
+ISDN = 0
+New PPPD = yes
+FlowControl = CRTSCTS
+Phone = #777
+Modem = /dev/ttyUSB0
+Username = smart
+Carrier Check = No
+Password = smart
+Baud = 9600
+# /etc/wvdial.conf
+[Dialer Defaults]
+Init1 = ATZ
+Init2 = ATQ0 V1 E1 S0=0 &C1 &D2 +FCLASS=0
+Modem Type = Analog Modem
+Phone = <Target Phone Number>
+ISDN = 0
+Password = <Your Password>
+New PPPD = yes
+Username = <Your Login Name>
+Modem = /dev/ttyUSB0
+Baud = 9600
+
+# alamat filesystem.squashfs pada live-session
+ls /lib/live/mount/medium/
+ls /lib/live/mount/rootfs/filesystem.squashfs/
+
+# alamat filesystem.squashfs pada live-casper-session
+ls /media/cdrom/
+ls /rofs/
+
+# file penyimpan settingan untuk MATE Desktop Environment
+ls ~/.config/dconf/user
+ls ~/.gconf/
+dconf write KEY VALUE
+dconf read KEY
+gconftool --type TYPE --set KEY VALUE
+gconftool --get KEY VALUE
+
+# file penyimpan accels untuk MATE Desktop Environment
+# setelah memasukkan perintah ini accel dapat diganti dengan 
+# memfokus menu dan menekan kombinasi tombol accels
+dconf write /org/mate/desktop/interface/can-change-accels true
+mkdir ~/.config/accels/
+
+# file tambahan Caja action untuk MATE Desktop Environment
+ls ~/.config/caja/scripts
+ls /usr/lib/x86_64-linux-gnu/caja/extensions-2.0/
+ls /usr/share/caja/ui
+
+# alternatif versi program, wallpaper, bootsplash, dan banyak lainnya
+ls /etc/alternatives/
+
+# open java jar file
+# Right-click -> Properties -> Open With Other Application...
+# Use a custom command -> /usr/bin/java -jar
+
+# correct conflict Caja and Git-Cola to open Home Folder
+# System -> Preferences -> Prefererred Applications
+# System -> File Manager -> Caja
+
+# override program dengan contoh mate-terminal override xterm
+ln -svf /usr/bin/mate-terminal /usr/bin/xterm
+
+# override library dengan contoh override versi via link
+ln -svf /usr/lib/libGraphicsMagick.so.3.11.0 /usr/lib/libGraphicsMagick.so.3
+
+# perintah marco window-snap untuk keyboard shortcut
+# Screensize 1366x768
+# Snap Left
+bash -c "wmctrl -r :ACTIVE: -b remove,maximized_horz,maximized_ver && wmctrl -r :ACTIVE: -e 0,0,0,683,768"
+# Snap Right
+bash -c "wmctrl -r :ACTIVE: -b remove,maximized_horz,maximized_ver && wmctrl -r :ACTIVE: -e 0,683,0,683,768"
+
+# White-FontColor for Caja's InputBox text
+Edit -> Backgrounds and Emblems -> Colors -> Onyx -> Drag the color-square to Caja's InputBox
+
+# Setting Not Saved e.g. Caja's Accels and Minbar's Location
+# Close and Re-Open
+
+# Virtualization using virtualbox
+# Use VT-x/AMD-V with Nested-Paging in both hardware and virtualbox
+
+# Custom tema situs web-browser Firefox
+# https://addons.mozilla.org/en-US/firefox/addon/stylish/
+
+# Default TextTabWidth	: 8
+# Default DisplayFont	: Sans 8
+# Default FixWidthFont	: Monospace 8
+
+# folder standard wallpaper
+ls /usr/share/backgrounds/
+
+# pengaturan default value dconf
+ls /usr/share/glib-2.0/schemas/*.gschema.xml
+nano /usr/share/glib-2.0/schemas/org.mate.panel.applet.multiload.gschema.xml
+nano /usr/share/glib-2.0/schemas/org.mate.terminal.gschema.xml
+nano /usr/share/glib-2.0/schemas/ubuntu-mate.gschema.override
+glib-compile-schemas /usr/share/glib-2.0/schemas/
+ls /usr/share/glib-2.0/schemas/gschemas.compiled
+
+# pengaturan default value gconf
+ls /var/lib/gconf/debian.defaults/%gconf-tree.xml
+ls /etc/gconf/gconf.xml.defaults/%gconf-tree.xml
+gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults --type string --set KEY VALUE
+gconftool-2 --dump /the/settings/branch/you/need > ~/live/your-new-settings.xml
+gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults --load /your-new-settings.xml
+
+# pengaturan default value lainnya
+ls /usr/lib/ubiquity/ubiquity/misc.py #line 672
+dpkg-reconfigure keyboard-configuration
+dpkg-reconfigure tzdata
+locale-gen new_locale
+update-locale LANG=new_locale LANGUAGE=new_locale LC_ALL=new_locale
+
+# blueman setting
+gconftool-2 --type boolean --set /apps/blueman/transfer/opp_enabled true
+gconftool-2 --type boolean --set /apps/blueman/transfer/opp_accept true
+gconftool-2 --type string --set /apps/blueman/transfer/browse_command "caja obex://[%d]"
+
+# Geany enhancement autocomplete
+# copy official tags file
+sudo cp -rvf repo_local/geany/tags/ /usr/share/geany/
+# generate headers to open it
+echo "#include <gtk/gtk.h>" >> gtk_headers.c
+gcc -E gtk_headers.c $(pkg-config gtk+-2.0 --cflags --libs) -o gtk_headers.h
+geany gtk_headers.h
+# generate tags file
+CFLAGS=`pkg-config --cflags --libs gtk+-2.0 gmodule-2.0` geany -g gtk2.c.tags /usr/include/gtk-2.0/gtk/gtk.h
+CFLAGS=`pkg-config --cflags --libs gtk+-2.0 gmodule-2.0` geany -g -P gtk2.c.tags /usr/include/gtk-2.0/gtk/*.h
+cp -vf *.*.tags ~/.config/geany/tags/
+sudo cp -vf *.*.tags /usr/share/geany/tags
+
+# wine force using 32 bit
+export WINEPREFIX=$HOME/.wine/
+export WINEARCH=win32
+rm -rvf ~/.wine
+winecfg
+winetricks
+
+# Hibernation => lose data
+# Default Hibernate: Disabled
+# Manual Hibernation
+sudo pm-hibernate
+
+# Windows USB installer
+ppa:colingille/freshlight
+https://launchpad.net/~colingille/+archive/ubuntu/freshlight
+http://ppa.launchpad.net/colingille/freshlight/ubuntu/
+deb http://ppa.launchpad.net/colingille/freshlight/ubuntu saucy main
+wget http://ppa.launchpad.net/colingille/freshlight/ubuntu/pool/main/w/winusb/winusb_1.0.11+saucy1_amd64.deb
+wget http://ppa.launchpad.net/colingille/freshlight/ubuntu/pool/main/w/winusb/winusb_1.0.11+saucy1.tar.gz

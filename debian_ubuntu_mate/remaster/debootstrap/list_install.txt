@@ -1,0 +1,289 @@
+# skrip untuk menampilkan paket-paket official terpilih untuk diinstal terutama untuk kebutuhan belajar programming
+
+# daftar paket terpilih untuk Linux minimalis
+echo "
+ubuntu-minimal
+linux-image-generic
+linux-headers-generic
+initramfs-tools
+systemd
+psmisc
+nano
+wget
+rsync
+e2fsprogs
+ntfs-3g
+dosfstools
+adduser
+hostname
+passwd
+live-boot
+language-pack-en-base
+" > minimal_linux.html
+
+# daftar paket terpilih untuk tambahan Linux minimalis
+echo "
+info
+man-db
+sudo
+mlocate
+usbutils
+pm-utils
+unrar
+htop
+ssh
+" > minimal_linux_enhancement.html
+
+# daftar paket terpilih untuk GUI minimalis
+echo "
+gksu
+xinit
+xauth
+xorg
+xserver-xorg
+xserver-xorg-input-all
+xserver-xorg-video-all
+lightdm lightdm-gtk-greeter
+lightdm-gtk-greeter-settings
+" > minimal_gui.html
+
+# daftar paket terpilih untuk MATE Desktop Environment
+echo "
+network-manager-gnome
+gnome-calculator
+qt4-qtconfig
+hardinfo
+firefox
+gparted
+geany
+mate-desktop-environment-core
+mate-panel
+mate-session-manager
+mate-control-center
+mate-terminal
+mate-system-monitor
+mate-menus mate-menu
+mate-power-manager
+mate-utils
+mate-notification-daemon
+mate-polkit
+mate-system-tools
+mate-themes
+mate-icon-theme-faenza
+mate-media
+mate-tweak
+mate-applets
+mate-screensaver
+desktop-base
+marco
+wmctrl
+dconf-tools
+pluma
+caja
+caja-gksu
+caja-open-terminal
+caja-share
+eom
+atril
+mozo
+engrampa
+" > mate_desktop.html
+
+# daftar paket terpilih untuk utilitas programming desktop
+echo "
+git-cola
+eagle
+blueman
+gimp
+xsane
+inkscape
+vlc
+xchm
+ghex
+cups
+brasero
+virtualbox-qt
+xterm
+gtkterm
+" > desktop_utility_programming.html
+
+# daftar paket terpilih untuk compiler
+echo "
+gcc
+g++
+build-essential
+gcc-avr
+avr-libc
+avrdude
+gcc-arm-none-eabi
+libnewlib-arm-none-eabi
+libnewlib-dev
+stm32flash
+libftdi-dev
+libusb-1.0-0-dev
+automake
+cmake
+dh-autoreconf
+pkg-config
+default-jdk
+icedtea-plugin
+libopencv-dev
+" > compiler.html
+
+# daftar paket terpilih untuk Qt-Framework
+echo "
+qtcreator
+qt4-designer
+qt4-qmake
+qt4-dev-tools
+libqt4-dev
+libqt4-svg
+libqt4-opengl-dev
+libqtwebkit-dev
+libqwt5-qt4-dev
+qt5-default
+qt5-qmake
+qtbase5-dev
+qtbase5-dev-tools
+qttools5-dev
+libqt5svg5-dev
+libqt5opengl5-dev
+libqt5webkit5-dev
+libqt5serialport5-dev
+libqwt-qt5-dev
+" > qt_framework.html
+
+# daftar paket terpilih untuk GTK-Framework
+echo "
+libgtk2.0-dev
+glade
+glade-gtk2
+libglade2-0
+libglade2-dev
+libwebkitgtk-dev
+libgtk-3-dev
+" > gtk_framework.html
+
+# daftar paket terpilih untuk Python Programming
+echo "
+python-qt4-gl
+pyqt4-dev-tools
+python3-serial
+python3-pyqt5.qtserialport
+pyqt5-dev-tools
+python-gtk2
+python-glade2
+python-opencv
+python-numpy
+python-serial
+python-caja
+python-pycurl
+python3-pycurl
+" > opencv.html
+
+# daftar paket terpilih untuk PHP Programming
+echo "
+php5
+php5-cli
+php5-curl
+php5-mysql
+php5-json
+php5-cgi
+apache2
+libapache2-mod-php5
+mysql-server
+mysql-workbench
+libqt5sql5-mysql
+" > web_programming.html
+
+# daftar paket terpilih untuk utilitas networking
+echo "
+ftp
+iputils-ping
+iputils-tracepath
+net-tools
+wireless-tools
+samba
+wvdial
+curl
+socat
+tcpdump
+ucspi-tcp
+netcat
+netcat-openbsd
+nmap
+telnet
+nfs-common
+" > networking.html
+
+# daftar paket terpilih untuk LiveSystem-Building
+echo "
+gddrescue
+debootstrap
+squashfs-tools
+genisoimage
+unetbootin
+grub-pc grub-efi
+syslinux syslinux-efi syslinux-common
+efibootmgr
+extlinux
+isolinux
+" > live_system_building.html
+
+# daftar paket terpilih untuk Perhitungan Scientific
+echo "
+gnuplot-qt
+libgnuplot-iostream-dev
+octave
+octave-image
+octave-signal
+liboctave-dev
+qalculate-gtk
+" > scientific_calculation.html
+
+# daftar paket terpilih untuk Office Utility
+echo "
+libreoffice-calc
+libreoffice-impress
+libreoffice-writer
+libreoffice-gnome
+texlive texstudio
+latex2html latex2rtf
+freeplane
+" > office_utility.html
+
+# daftar paket terpilih untuk konten Islami
+echo "
+minbar itools
+hijra-applet python-hijra
+thawab
+zekr
+othman python-othman
+monajat python-monajat
+libitl-dev libitl-gobject-dev python-gst0.10-dev python-gst-1.0
+fonts-hosny-amiri fonts-arabeyes xfonts-intl-arabic
+language-pack-ar
+" > islamic_contents.html
+
+# daftar paket terpilih untuk driver sistem tertentu
+echo "
+firmware-atheros linux-firmware
+ubuntu-drivers-common
+" > driver.html
+
+# daftar paket terpilih untuk sistem Raspbian
+echo "
+<H3> Raspbian-OpenCV-Qt </H3>
+geany
+qtcreator
+libqt4-dev
+libopencv-dev
+" > raspbian_app.html
+
+# daftar paket yang terkadang bermasalah dan sebaiknya dibuang
+echo "
+<H3> Trouble-Package </H3>
+brltty
+apt-xapian-index
+" > trouble_package.html
+

@@ -1,0 +1,35 @@
+files_override() {
+	cd /etc/xdg/awesome/
+	cp -f matewm-tiling.lua rc.lua
+
+	cd /usr/share/awesome/themes/default/
+	cp -f matewm-tiling.png background.png
+}
+
+awesome_menu() {
+	rm -f /usr/share/xsessions/awesome.desktop
+}
+
+
+post_msg() {
+echo "-----------------------
+for MATE Panel layout:
+
+gsettings set org.mate.panel default-layout 'matewm-tiling'
+mate-panel --reset
+-----------------------"
+}
+
+after_install() {
+	files_override
+	awesome_menu
+	post_msg
+}
+
+post_install() {
+	after_install
+}
+
+post_upgrade() {
+	after_install
+}

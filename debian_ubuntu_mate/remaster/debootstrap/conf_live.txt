@@ -1,0 +1,283 @@
+# skrip ini untuk membangun sendiri Debian/Ubuntu dari repository
+# debootstrap, rsync, squashfs-tools, genisoimage, parted, syslinux, dan isolinux
+
+# masuk ke terminal dengan privillage super-user
+su
+
+# link skrip debootstrap untuk versi unstable (Debian) dan devel (Ubuntu)
+# konten unstable amd64: http://mirror.internode.on.net/pub/debian/dists/unstable/Contents-amd64.gz
+# konten devel amd64: http://mirror.internode.on.net/pub/ubuntu/ubuntu/dists/devel/Contents-amd64.gz
+ln -svf sid /usr/share/debootstrap/scripts/unstable
+ln -svf gutsy /usr/share/debootstrap/scripts/devel
+
+# sumber minimal-base-system langsung dari repository
+debootstrap --arch=amd64 --variant=minbase unstable ./base/ http://mirror.internode.on.net/pub/debian/
+debootstrap --arch=amd64 --variant=minbase devel ./base/ http://mirror.internode.on.net/pub/ubuntu/ubuntu/
+mkdir ./root-system/
+rsync -av ./base/ ./root-system/
+
+# persiapan file-file kebutuhan instalasi
+# debman_0.0.0_all.deb
+# conf_live.txt
+# boot.png
+cp -vf debman_0.0.0_all.deb root-system/var/cache/apt/archives/
+
+# jika file repo dan paket sudah tersedia
+cp -vf folder_repo/* root-system/var/lib/apt/lists/
+cp -vf folder_paket/* root-system/var/cache/apt/archives/
+
+# untuk konek langsung ke internet
+cp -vf /etc/resolv.conf root-system/etc/
+
+# login chroot
+mount --bind /dev/ root-system/dev
+chroot root-system
+mount -t proc none /proc
+mount -t sysfs none /sys
+mount -t devpts none /dev/pts
+export HOME=/home
+export LC_ALL=C
+
+# pengecekan persiapan file-file kebutuhan instalasi
+cd
+dpkg --install /var/cache/apt/archives/debman_0.0.0_all.deb
+debman -Rs /usr/share/debman/example/server_repo.txt
+debman -Rl server_repo_download.txt
+cat server_repo_download.txt
+debman -Pl /usr/share/debman/example/pasang_paket.txt pasang_paket_download.txt
+cat pasang_paket_download.txt
+
+# install program sesuai kebutuhan
+nano /etc/apt/apt.conf
+nano /etc/apt/sources.list
+nano /etc/apt/preferences
+ls /var/cache/apt/archives/
+ls /var/lib/apt/lists/
+apt-get install <package_name>
+debman -Pi /usr/share/debman/example/pasang_paket.txt .
+apt-get remove <package_name>
+apt-get autoclean
+apt-get clean
+debman -Pc
+
+# buat user baru dan hostname baru
+export HOME=/home
+export LC_ALL=C
+rm -rvf /home/*
+rm -rvf /home/.*
+passwd root
+adduser live
+gpasswd -a live sudo
+xhost SI:localuser:root
+sudo visudo
+echo "live ALL=(ALL) NOPASSWD:ALL"
+echo "127.0.1.1 $(cat /etc/hostname)" >> /etc/hosts
+chmod a+r /boot/vmlinuz*
+chmod a+r /boot/initrd.img*
+
+# lightdm login otomatis
+cp -vf /etc/lightdm/lightdm.conf /etc/lightdm/lightdm.conf.backup
+echo "
+[SeatDefaults]
+user-session=mate
+allow-guest=false
+autologin-user=live
+autologin-user-timeout=0
+" > /etc/lightdm/lightdm.conf
+
+# default grub minimalis
+cp -vf /etc/default/grub /etc/default/grub_backup
+echo "
+GRUB_DEFAULT=0
+GRUB_TIMEOUT=10
+GRUB_DISTRIBUTOR=`lsb_release -i -s 2> /dev/null || echo Debian`
+GRUB_CMDLINE_LINUX_DEFAULT=\"quiet\"
+GRUB_CMDLINE_LINUX=""
+" > /etc/default/grub
+
+# edit lsb_release output
+nano /etc/lsb-release
+
+# autostart nm-applet
+# remove line contain AutostartCondition
+nano /etc/xdg/autostart/nm-applet.desktop
+
+# exit dari system chroot
+umount -lf /proc
+umount -lf /sys
+umount -lf /dev/pts
+rm -rvf /tmp/*
+rm -rvf /root/*
+rm -rvf /root/.*
+history -c
+exit
+umount -lf root-system/dev
+
+# salin file konfigurasi sesuai selera
+cp -rvf ~/.config/ root-system/home/live
+cp -rvf ~/.gconf/ root-system/home/live
+cp -vf conf_live.txt root-system/home/live
+chown -Rvf 1000:1000 root-system/home/*
+cp -vf /etc/lightdm/lightdm-gtk-greeter-ubuntu.conf root-system/etc/lightdm/
+
+# mempersiapkan live-system
+mkdir ./live-system/
+mkdir ./live-system/live/
+cp -vf ./root-system/boot/vmlinuz* ./live-system/live/vmlinuz
+cp -vf ./root-system/boot/initrd.img* ./live-system/live/initrd.img
+
+# kompres file system root ke filesystem.squashfs secara default
+rm -vf live-system/live/filesystem.squashfs
+mksquashfs root-system live-system/live/filesystem.squashfs
+
+# kompres file system root ke filesystem.squashfs dengan blocksize
+rm -vf live-system/live/filesystem.squashfs
+mksquashfs root-system live-system/live/filesystem.squashfs -b 1048576
+
+# file untuk booting syslinux/isolinux (sistem BIOS)
+cp -vf /usr/lib/syslinux/modules/bios/ldlinux.c32 ./live-system/
+cp -vf /usr/lib/syslinux/modules/bios/libutil.c32 ./live-system/
+cp -vf /usr/lib/syslinux/modules/bios/libcom32.c32 ./live-system/
+cp -vf /usr/lib/syslinux/modules/bios/vesamenu.c32 ./live-system/
+cp -vf /usr/lib/syslinux/modules/bios/reboot.c32 ./live-system/
+cp -vf /usr/lib/ISOLINUX/isolinux.bin ./live-system/
+
+# konten file syslinux/isolinux minimalis
+# boot.png #000000ff 600x480 max 100 kb
+echo "
+default vesamenu.c32
+prompt 0
+timeout 50
+
+menu color title * #ffffffff *
+menu color label * #ffffffff *
+menu color border * #ffffffff #00000000 *
+menu color sel * #ffffffff #76a1d0ff *
+menu color tabmsg * #ffffffff #00000000 *
+
+menu background boot.png
+menu title Debian_Ubuntu GNU/Linux by Abu Musa
+
+label live-boot
+	menu label Boot-Live
+	linux /live/vmlinuz
+	initrd /live/initrd.img
+	append boot=live config quiet splash init=/bin/systemd
+
+label rebooting
+	menu label Reboot
+	com32 /reboot.c32
+
+" > ./live-system/syslinux.cfg
+cp -vf ./live-system/syslinux.cfg ./live-system/isolinux.cfg
+cp -vf boot.png ./live-system/
+
+# ganti ownership semua file live-system
+chown -Rvf 1000:1000 ./live-system/
+
+# keluar dari terminal dengan privillage super-user
+exit
+
+# =====================================================================
+
+# membuat file img storage
+dd bs=1k count=2048 seek=1G if=/dev/zero of=file_storage.img
+mkfs.ext4 -F file_storage.img
+
+# mengatur partisi disk
+su
+fdisk -l
+dd bs=1k count=2048 if=/dev/zero of=/dev/sdb
+parted /dev/sdb mklabel msdos
+parted /dev/sdb print
+parted /dev/sdb mkpart primary fat32 0 3096
+parted /dev/sdb mkpart primary fat32 0 100%
+parted /dev/sdb mkpart primary fat32 0% 100%
+mkfs.vfat /dev/sdb1
+mkfs.vfat /dev/sdb2
+exit
+
+# =====================================================================
+
+# membuat LiveUSB dengan syslinux
+su
+mkfs.vfat /dev/sdb1
+mkfs.vfat /dev/sdb2
+dd conv=notrunc bs=440 count=1 if=/usr/lib/syslinux/mbr/mbr.bin of=/dev/sdb
+parted /dev/sdb set 1 boot on
+syslinux /dev/sdb1
+mkdir /mnt/liveUSB
+mount /dev/sdb1 /mnt/liveUSB
+exit
+cp -rvf ./live-system/* /mnt/liveUSB
+
+# =====================================================================
+
+# membuat LiveDVD dengan isolinux dan genisoimage
+genisoimage -rational-rock -volid "Debian_Ubuntu Live" -cache-inodes -joliet -full-iso9660-filenames -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -output ./debian_ubuntu-live.iso ./live-system
+
+# =====================================================================
+
+# contoh file konfigurasi mount untuk /etc/fstab
+blkid
+echo "
+# <filesystem> <mount point> <type> <options> <dump> <pass>
+
+UUID= none swap sw 0 0
+UUID= / ext4 defaults 0 0
+UUID= /home ext4 defaults 0 0
+" >> /etc/fstab
+
+# alamat file media dan file root pada live-session
+ls /lib/live/mount/medium/
+ls /lib/live/mount/rootfs/filesystem.squashfs/
+
+# install LiveDVD atau LiveUSB ke HDD
+su
+echo "boot LiveUSB atau LiveDVD"
+ls /home/live/conf_live.txt
+mkfs.ext4 /dev/sda1
+mkfswap /dev/sda2
+mkdir /mnt/root
+mount /dev/sda1 /mnt/root
+rsync -av /lib/live/mount/rootfs/filesystem.squashfs/ /mnt/root/
+grub-install --root-directory=/mnt/root /dev/sda
+mount --bind /dev/ /mnt/root/dev
+chroot /mnt/root
+mount -t proc none /proc
+mount -t sysfs none /sys
+mount -t devpts none /dev/pts
+export HOME=/home
+export LC_ALL=C
+passwd root
+deluser live
+rm -rvf /home/*
+rm -rvf /home/.*
+adduser username
+gpasswd -a username sudo
+xhost SI:localuser:root
+sudo visudo
+echo "username ALL=(ALL) NOPASSWD:ALL"
+echo "127.0.1.1 $(cat /etc/hostname)" >> /etc/hosts
+update-grub
+nano /etc/fstab
+nano /etc/lightdm/lightdm.conf
+nano /boot/grub/grub.cfg
+apt-get autoclean
+apt-get clean
+debman -Pc
+umount -lf /proc
+umount -lf /sys
+umount -lf /dev/pts
+rm -rvf /tmp/*
+rm -rvf /root/*
+rm -rvf /root/.*
+history -c
+exit
+umount -lf /mnt/root/dev/
+cp -rvf /lib/live/mount/rootfs/filesystem.squashfs/home/live/.config/ /mnt/root/home/username/
+cp -rvf /lib/live/mount/rootfs/filesystem.squashfs/home/live/.gconf/ /mnt/root/home/username/
+chown -Rvf 1000:1000 /mnt/root/home/username/
+umount /mnt/root
+reboot
+

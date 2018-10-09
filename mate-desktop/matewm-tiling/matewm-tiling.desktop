@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=MATE-Tiling
+Comment=MATE with Tiling WM
+Exec=matewm-tiling-session
+TryExec=matewm-tiling-session
+Icon=
+Type=Application
+DesktopNames=MATE-Tiling
+Keywords=launch;MATE;Tiling;desktop;session;

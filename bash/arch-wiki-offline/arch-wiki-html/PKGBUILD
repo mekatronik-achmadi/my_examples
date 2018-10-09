@@ -1,0 +1,22 @@
+pkgname=arch-wiki-html
+pkgver=0.1
+pkgrel=1
+pkgdesc="arch linux wiki offline in html format"
+arch=('any')
+url=
+license=('GPL')
+depends=('arch-wiki-lite')
+optdepends=('arch-wiki-offline: download and build this html offline wiki')
+conflicts=('arch-wiki-docs')
+provides=('arch-wiki-docs')
+makedepends=
+options=('!makeflags')
+source=("html.zip")
+sha256sums=('SKIP')
+
+package() {
+	unzip -qqo html.zip
+	
+	install -d $pkgdir/usr/share/doc/arch-wiki
+	mv -f ./html $pkgdir/usr/share/doc/arch-wiki
+}

@@ -1,0 +1,180 @@
+# skrip ini untuk memodifikasi dvd official LinuxMint MATE amd64
+# rsync squashfs-tools genisoimage parted syslinux syslinux-efi isolinux
+# https://help.ubuntu.com/community/LiveCDCustomization
+# https://help.ubuntu.com/community/LiveCDCustomizationFromScratch
+
+# masuk ke terminal dengan privillage super-user
+sudo su
+
+# pengaturan wget untuk proxy
+echo "
+https_proxy = https://achmadi10%40mhs.ep.its.ac.id:mekatro05@proxy.its.ac.id:8080
+http_proxy = http://achmadi10%40mhs.ep.its.ac.id:mekatro05@proxy.its.ac.id:8080
+ftp_proxy = ftp://achmadi10%40mhs.ep.its.ac.id:mekatro05@proxy.its.ac.id:8080
+" >> /etc/wgetrc
+
+# sumber file dari Official DVD
+mkdir /mnt/dvdiso
+mkdir ./dvdiso
+mount linuxmint-17.1-mate-64bit.iso /mnt/dvdiso/
+rsync -av --exclude=/casper/filesystem.squashfs /mnt/dvdiso/ ./dvdiso
+mkdir ./root-system/
+unsquashfs -f -d ./root-system/ /mnt/dvdiso/casper/filesystem.squashfs
+
+# untuk konek langsung ke internet
+##cp -vf /etc/resolv.conf root-system/etc/
+##cp -vf /etc/host root-system/etc/
+
+# login chroot
+mount --bind /dev/ root-system/dev
+chroot root-system
+mount -t proc none /proc
+mount -t sysfs none /sys
+mount -t devpts none /dev/pts
+export HOME=/home
+export LC_ALL=C
+
+# pengaturan software
+dbus-uuidgen > /var/lib/dbus/machine-id
+dpkg-divert --local --rename --add /sbin/initctl
+ln -s /bin/true /sbin/initctl
+cd
+dpkg --add-architecture i386
+echo 'APT::Install-Recommends "true";' > /etc/apt/apt.conf.d/00recommends
+echo 'APT::Install-Recommends "true";' > /etc/apt/apt.conf.d/99synaptic
+echo 'APT::Install-Recommends "true";' >> /etc/apt/apt.conf
+echo "deb http://mirror.internode.on.net/pub/linuxmint-packages/ rafaela main upstream import " >> /etc/apt/sources.list
+# sudo cp -vf sources.list root-system/etc/apt/
+apt-get --print-uris --yes update | grep ^\' > server_repo.list
+# ./repo-index server_repo.list folder_repo
+# sudo cp -vf folder_repo/* root-system/var/lib/apt/lists/
+# sudo cp -vf tambah_paket.txt root-system/home/
+apt-get --print-uris --yes install $(cat tambah_paket.txt) | grep ^\' | cut -d\' -f2 > daftar_paket.list
+# mkdir ./folder_paket/; wget -i daftar_paket.list && mv -vf ./*.deb ./folder_paket/
+# sudo cp -vf folder_paket/* root-system/var/cache/apt/archives/
+apt-get install $(cat tambah_paket.txt)
+# sudo pluma root-system/var/lib/dpkg/status
+apt-get autoremove
+apt-get clean
+apt-get autoclean
+
+# disable crash report (apport)
+echo "enabled=0" > /etc/default/apport
+rm -vf /var/crash/*
+
+# disable service yang tidak dibutuhkan
+systemctl disable apport
+/etc/init.d/apport stop
+systemctl disable mysql
+/etc/init.d/mysql stop
+systemctl disable apache2
+/etc/init.d/apache2 stop
+
+# pengaturan konfigurasi default
+# sudo cp -vf mate-panel.gschema.override root-system/usr/share/glib-2.0/schemas/
+# sudo cp -vf mint-artwork-mate.gschema.override root-system/usr/share/glib-2.0/schemas/
+glib-compile-schemas /usr/share/glib-2.0/schemas/
+##gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults --type string --set KEY VALUE
+
+# user tweak
+##usermod -u 500 $hit
+##awk -F: '$3 == 999' /etc/passwd
+passwd root
+
+# exit dari system chroot
+rm /sbin/initctl
+dpkg-divert --rename --remove /sbin/initctl
+umount -lf /proc
+umount -lf /sys
+umount -lf /dev/pts
+rm -rvf /tmp/*
+rm -rvf /root/*
+rm -rvf /root/.*
+history -c
+exit
+umount -lf root-system/dev
+##rm root-system/etc/hosts
+##rm root-system/etc/resolv.conf
+
+# pengaturan konten di /home dan /root
+ls -lah root-system/home/
+ls -lah root-system/root/
+rm -vf root-system/root/.bash_history
+
+# custom prompt
+cp -vf bash.rc root-system/etc/skel/.bashrc
+
+# membuat manifest filesystem baru
+chroot root-system dpkg-query -W --showformat='${Package} ${Version}\n' > ./dvdiso/casper/filesystem.manifest
+echo "" > ./dvdiso/casper/filesystem.manifest-remove
+##sed -i '/ubiquity/d' ./dvdiso/casper/filesystem.manifest
+##sed -i '/casper/d' ./dvdiso/casper/filesystem.manifest
+
+# kompres file system root ke filesystem.squashfs secara default
+rm -vf ./dvdiso/casper/filesystem.squashfs
+mksquashfs root-system ./dvdiso/casper/filesystem.squashfs
+
+# persiapan membentuk file dvd iso
+##nano ./dvdiso/README.diskdefines
+##nano ./dvdiso/.disk/info
+##cp -vf isolinux.cfg ./dvdiso/isolinux/
+rm -vf ./dvdiso/preseed/*
+printf $(sudo du -sx --block-size=1 ./dvdiso | cut -f1) > ./dvdiso/casper/filesystem.size
+cd ./dvdiso
+rm md5sum.txt
+find -type f -print0 | sudo xargs -0 md5sum | grep -v isolinux/boot.cat | sudo tee md5sum.txt
+cd ..
+
+# membuat LiveDVD dengan isolinux dan genisoimage
+rm -vf ./linuxmint-mate-custom.iso
+mkisofs -D -r -V "$IMAGE_NAME" -cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o ./linuxmint-mate-custom.iso ./dvdiso/
+chown -vf 1000:1000 ./linuxmint-mate-custom.iso
+
+# keluar dari terminal dengan privillage super-user
+exit
+
+# alamat filesystem.squashfs pada live-casper-session
+ls /media/cdrom/
+ls /rofs/
+
+# membuat live usb dengan usb-creator-gtk
+sudo su
+##fdisk -l #pastikan usb-flashdrive
+##dd bs=1k count=2048 if=/dev/zero of=/dev/sdb
+##parted /dev/sdb mklabel msdos
+##parted /dev/sdb print
+##parted /dev/sdb mkpart primary fat32 0 100%
+mkfs.vfat /dev/sdb1
+##dd conv=notrunc bs=440 count=1 if=/usr/lib/syslinux/mbr/mbr.bin of=/dev/sdb
+parted /dev/sdb set 1 boot on
+exit
+##usb-creator-gtk #no persistent
+sudo mount /dev/sdb1 /media/usb0
+unebootin #with 0 MB persistent file
+
+# membuat live usb dengan usb-creator-gtk dengan persistency
+sudo su
+##fdisk -l #pastikan usb-flashdrive
+##dd bs=1k count=2048 if=/dev/zero of=/dev/sdb
+##parted /dev/sdb mklabel msdos
+##parted /dev/sdb print
+##parted /dev/sdb mkpart primary fat32 0 3000
+##parted /dev/sdb mkpart primary fat32 3000 100%
+mkfs.vfat /dev/sdb1
+mkfs.ext4 /dev/sdb2
+##dd conv=notrunc bs=440 count=1 if=/usr/lib/syslinux/mbr/mbr.bin of=/dev/sdb
+parted /dev/sdb set 1 boot on
+mlabel::"livefs " -i /dev/sdb1
+e2label /dev/sdb2 "casper-rw"
+exit
+##usb-creator-gtk #with minimal 1GB persistent file
+sudo mount /dev/sdb1 /media/usb0
+unebootin #with 10 MB persistent file
+rm -vf /media/usb0/casper-rw
+
+# menu live usb untuk syslinux dan UEFI-grub2
+rm -vf /media/usb0/ubn*
+rm -vf /media/usb0/menu.c32
+cp -vf /media/usb0/isolinux/vesamenu.c32 /media/usb0/
+cp -vf syslinux.cfg /media/usb0/
+cp -vf grub.cfg /media/usb0/boot/grub/

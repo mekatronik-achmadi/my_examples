@@ -1,0 +1,7 @@
+#!/bin/bash
+
+echo "
+https_proxy = https://$1:$2@$3:$4
+http_proxy = http://$1:$2@$3:$4
+ftp_proxy = ftp://$1:$2@$3:$4
+" >> /etc/wgetrc

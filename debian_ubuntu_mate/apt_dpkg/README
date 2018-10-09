@@ -1,0 +1,25 @@
+# download all files
+chmod -vf a+x get_repo
+chmod -vf a+x wget_proxy
+
+# preparing wget
+# replace @ with %40
+
+sudo ./wget_proxy username%40email password proxy port
+
+# preparing repo index
+
+sudo rm -vf /etc/apt/sources.list
+sudo cp -vf daftar_repo /etc/apt/sources.list
+./get_repo server_repo.list folder_repo
+sudo rm -vf /var/lib/apt/lists/
+sudo cp -vf folder_repo/* /var/lib/apt/lists/
+
+# install packages
+apt-cache search namapaket
+apt-cache show namapaket
+apt-get --print-uris --yes install $(cat tambah_paket.txt) | grep ^\' | cut -d\' -f2 > daftar_paket.list
+mkdir ./folder_paket/; wget -i daftar_paket.list && mv -vf ./*.deb ./folder_paket/
+sudo cp -vf folder_paket/* /var/cache/apt/archives/
+sudo apt-get install $(cat tambah_paket.txt)
+

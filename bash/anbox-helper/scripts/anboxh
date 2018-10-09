@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd /usr/share/anbox-helper/
+python2 anboxh.py

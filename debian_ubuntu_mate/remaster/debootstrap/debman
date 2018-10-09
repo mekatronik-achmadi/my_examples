@@ -1,0 +1,468 @@
+#!/bin/bash
+# skrip ini berguna untuk membantu mengatur paket-paket software berbasis ubuntu/debian
+# skrip ini pertama kali di tulis oleh Achmadi S.T.
+# skrip ini berusaha menjawab tantangan penggunaan teknologi FOSS sementara koneksi internet Indonesia masih buruk
+
+if [ $# -eq 0 ]; then
+	echo "argumen tidak sah"
+	echo "ketikkan \"debman -h\" untuk bantuan"
+	exit
+fi
+
+if [ $1 == "-h" ]; then
+	echo "pemakaian :"
+	echo "debman [-v | -h | -H]"
+	echo "debman -C"
+	echo "debman -W file_input"
+	echo "debman -Rv file_output"
+	echo "debman -Rs file_input"
+	echo "debman -Rl file_output"
+	echo "debman -Rd file_input folder_output"
+	echo "debman -Ri folder_input"
+	echo "debman -Pr file_input"
+	echo "debman -Pl file_input file_output"
+	echo "debman -Pd file_input folder_output"
+	echo "debman -Pi file_input folder_input"
+	echo "debman -Pc"
+	echo "debman [-As | -Av | -Ai | -Ad | -Ar] nama_paket"
+	echo "debman [-Dc | -Dl ] nama_paket"
+	echo "debman -Do file_terpasang"
+	echo "debman -Di file_input"
+	echo "debman -Dr nama_paket"
+	echo "debman -Dh file_output"
+	echo "debman -Dp folder_input"
+	echo "debman -Db arsitektur dist folder_output url_input"
+	echo ""
+	echo "petunjuk :"
+	echo "-v	: menampilkan versi yang anda pakai ini (version)"
+	echo "-h	: menampilkan pesan ini (help)"
+	echo "-H	: menampilkan pesan bantuan dengan lebih lengkap (Help)"
+	echo "-C	: paket rekomendasi sebagai dependensi [ROOT] (Config)"
+	echo "-W	: menambahkan proxy server untuk digunakan downloader wget dari file_input [ROOT] (Wget)"
+	echo "-Rv	: menampilkan server repo di source.list dan Package list ke file_output (Repo-view)"
+	echo "-Rs	: menambahkan server repo di source.list dari file_input [ROOT] (Repo-server)"
+	echo "-Rl	: membuat daftar file teks berisi paket yang tersedia di server (Repo-list)"
+	echo "-Rd	: mendownload file teks berisi paket yang tersedia dari server dengan wget (Repo-download)"
+	echo "-Ri	: memasang file teks berisi paket yang tersedia di server [ROOT] (Repo-install)"
+	echo "-Pr	: membuang paket [ROOT] (Package-remove)"
+	echo "-Pl	: membuat daftar paket yang akan di download dari server (Package-list)"
+	echo "-Pd	: mendownload paket yang akan di instal dari server repo (Package-download)"
+	echo "-Pi	: memasang paket yang telah di download [ROOT] (Package-install)"
+	echo "-Pc	: membersihkan file-file paket di cache [ROOT] (Package-clean)"
+	echo "-As	: mencari nama paket (Available-search)"
+	echo "-Av	: mencari versi paket yang tersedia di server (Available-version)"
+	echo "-Ai	: deskripsi paket (Available-description)"
+	echo "-Ad	: mencari dependensi dari suatu paket (Available-dependencies)"
+	echo "-Ar	: mencari kebalikan dependensi dari suatu paket (Availabel-reverse_dependencies)"
+	echo "-Dc	: mengecek suatu paket yang terinstal (Debfile-check)"
+	echo "-Dl	: mencari hasil file dari suatu instalasi paket (Debfile-list)"
+	echo "-Do	: mencari asal paket dari suatu file yang terpasang (Debfile-origin)"
+	echo "-Di	: memasang file debian secara paksa [ROOT] (Debfile-install)"
+	echo "-Dr	: membuang file debian secara paksa [ROOT] (Debfile-remove)"
+	echo "-Dh	: membuat file berisi rekaman pengaturan paket (Debfile-history)"
+	echo "-Dp	: membuat file paket format *.deb (Debfile-packaging)"
+	echo "-Db	: membangun struktur minbase dengan debootstrap dan wget [ROOT] (Debfile-bootstrap)"
+	
+elif [ $1 == "-H" ]; then
+	echo "
+	Berikut akan dijelaskan contoh penggunaan software debman untuk manajemen paket dan repositori berbasis Debian atau Ubuntu.
+	Program lain yang diperlukan adalah:
+	- bash
+	- wget
+	- apt-get
+	- apt-cache
+	- dpkg
+	- cygwin (windows)
+	
+	Berikut adalah contoh urutan instalasi paket dan repositori sejak awal dari setelah instalasi OS
+	
+	Keterangan: Simbol > adalah simbol pengganti shell-prompt dan tidak perlu diketik di shell
+	
+	Khusus sistem dengan rekomendasi tidak masuk sebagai dependensi
+	> debman -C
+	
+	Khusus yang koneksinya di bawah proxy server
+	> debman -W ./contoh_file/wget_proxy.txt
+	
+	Jika keadaan khusus di atas tidak diperlukan dapat langsung dilanjutkan di bawah ini
+	> debman -Db amd64 unstable ./base/ http://mirror.internode.on.net/pub/debian/
+	> debman -Db amd64 devel ./base/ http://mirror.internode.on.net/pub/ubuntu/ubuntu
+	> debman -Rs ./contoh_file/server_repo.txt
+	> debman -Rl ./daftar_repo.txt
+	> debman -Rd ./daftar_repo.txt ./folder_repo
+	> debman -Ri ./folder_repo
+	> debman -Pr ./contoh_file/buang_paket.txt
+	> debman -Pl ./contoh_file/pasang_paket.txt ./daftar_paket.txt
+	> debman -Pd ./daftar_paket.txt ./folder_paket
+	> debman -Pi ./contoh_file/pasang_paket.txt ./folder_paket
+	
+	Untuk langkah [--proxy-wget | --repo-wget | --paket-wget] dapat dilakukan di warnet asalkan tersedia
+	1. bash, gunzip,bzip2, dan wget untuk warnet berbasis Linux
+	2. Cygwin dengan instalasi bash, gunzip,bzip2, dan wget untuk warnet berbasis Windows. Paket cygwin siap pakai ini dapat di download di:
+		http://offlineinstallers.net/cygwin-standalone-download/
+	
+	Penjelasan membuat beberapa file input. Pastikan setiap file diakhir garis kosong baru:
+	1. File ./contoh_file/wget_proxy.txt adalah file berisi alamat proxy server dengan format:
+	   [protokol]_proxy = [protokol]://[username]:[password]@[proxy_server]:[proxy_port]
+	   
+	   Untuk username berupa alamat email maka simbol @ diganti dengan %40
+	   
+	   Sebagai contoh:
+	   http_proxy = http://achmadi10%40mhs.ep.its.ac.id:abu_musa@proxy.its.ac.id:8080
+	
+	2. File ./contoh_file/utama_repo.txt adalah file berisi alamat dimana Packages.gz atau Packages.bz2 berada di suatu server
+	   Alamat tersebut ditulis dalam format yang telah dipersingkat.
+	   
+	   Sebagai contoh alamat:
+	   http://mirror.internode.on.net/pub/debian/dists/unstable/main/binary-amd64/Packages.bz2
+	   
+	   cukup ditulis sebagai:
+	   deb http://mirror.internode.on.net/pub/debian/ unstable main
+	   
+	   Catatan:
+	   -bagian binary-amd64 otomatis mengikuti arsitektur OS
+	   
+	3. File ./contoh_file/tambahan_repo.txt adalah file berisi alamat dimana Packages.gz atau Packages.bz2 berada di suatu server tambahan
+	   Alamat tersebut ditulis dalam format yang telah dipersingkat.
+	   
+	   Sebagai contoh alamat:
+	   ppa:colingille/freshlight
+	   
+	   dengan bantuan google di dapat halaman web ppa tersebut di launchpad dan memiliki alamat repo
+	   deb http://ppa.launchpad.net/colingille/freshlight/ubuntu saucy main
+	
+	4. File ./contoh_file/buang_paket.txt file berisi nama paket yang akan dibuang.
+	   Dependensi yang ikut tidak terpakai akan ikut terbuang.
+	   Nama paket ditulis nama paketnya saja (versi dan arsitektur tidak perlu ditulis).
+	   Nama paket ditulis dengan di pisah spasi atau garis baru
+	   
+	5. File ./contoh_file/pasang_paket.txt file berisi nama paket yang akan dibuang.
+	   Dependensi yang ikut terpakai akan ikut terdownload dan terpasang.
+	   Nama paket ditulis nama paketnya saja (arsitektur tidak perlu ditulis).
+	   Nama paket ditulis dengan di pisah spasi atau garis baru
+	   
+	   Jika diperlukan memilih versi maka ditulis seperti berikut tanpa ada spasi:
+	   nama_paket=nomor_versi
+	   
+	   Untuk melihat versi yang tersedia gunakan:
+	   > debman -Av nama_paket
+	   
+	   Versi paket tertera di bahwa segmen Provides: (paling bawah)
+	   Versi dengan angka lebih tinggi adalah versi lebih baru
+	 
+	"
+
+elif [ $1 == "-v" ]; then
+	echo "versi beta dan selamanya beta. hehe :v"
+
+elif [ $1 == "-C" ]; then
+	echo "APT::Install-Recommends \"true\";" > /etc/apt/apt.conf.d/00recommends
+	echo "APT::Install-Recommends \"true\";" > /etc/apt/apt.conf.d/99synaptic
+	echo "APT::Install-Recommends \"true\";" >> /etc/apt/apt.conf
+	echo "Pilihan paket rekomendasi telah di set"
+
+elif [ $1 == "-W" ]; then
+	if [ -z $2 ]; then
+		echo "file_input tidak boleh kosong"
+		exit
+	fi
+	kata=""
+	for i in `cat -A $2`; do
+		j=${#i}
+		k=$(($j-1))
+		if [ ${i:$k} == "$" ];then
+			kata=$(echo "$kata ${i:0:$k}")
+			echo $kata >> /etc/wgetrc
+			kata=""
+		else
+			kata=$(echo "$kata $i")
+		fi
+	done
+	echo "Wget sekarang dapat menggunakan proxy server"
+
+elif [ $1 == "-Rv" ]; then
+	if [ -z $2 ]; then
+		echo "file_output tidak boleh kosong"
+		exit
+	fi
+	echo "repository list on /etc/apt/sources.list" > $2
+	cat /etc/apt/sources.list >> $2
+	echo "package list on /var/lib/apt/lists/" >> $2
+	ls -l /var/lib/apt/lists/ >> $2
+	echo "Current Repository information saved"
+
+elif [ $1 == "-Rs" ]; then
+	if [ -z $2 ]; then
+		echo "file_input tidak boleh kosong"
+		exit
+	fi
+	kata=""
+	echo "# daftar server repository" > /etc/apt/sources.list
+	for i in `cat -A $2`; do
+		j=${#i}
+		k=$(($j-1))
+		if [ ${i:$k} == "$" ];then
+			kata=$(echo "$kata ${i:0:$k}")
+			echo $kata >> /etc/apt/sources.list
+			kata=""
+		else
+			kata=$(echo "$kata $i")
+		fi
+	done
+	echo "daftar server repository telah di set"
+
+elif [ $1 == "-Rl" ]; then
+	if [ -z $2 ]; then
+		echo "file_output tidak boleh kosong"
+		exit
+	fi
+	apt-get --print-uris --yes update | grep ^\' > $2
+	echo "file berisi daftar file untuk daftar paket di server repository telah dibuat"
+
+elif [ $1 == "-Rd" ]; then
+	if [ -z $2 ]; then
+		echo "file_input tidak boleh kosong"
+		exit
+	fi
+	if [ -z $3 ]; then
+		echo "folder_output tidak boleh kosong"
+		exit
+	fi
+	mkdir -v $3
+	mkdir -v ./temp
+	kata=""
+	for i in `cat -A $2`; do
+		j=${#i}
+		k=$(($j-1))
+		if [ ${i:$k} == "$" ];then
+			kata=$(echo "$kata ${i:0:$k}")
+			for l in $kata; do
+				m=${#l}
+				if [ $m -gt 5 ];then
+					if [ ${l:1:4} == "http" ];then
+						n=$((m-5))
+						if [ ${l:n:4} == ".bz2" ]; then
+							url_repo=$(echo ${l:0:n} | cut -d\' -f2)
+						fi
+						n=$((m-4))
+						if [ ${l:n:3} == ".gz" ]; then
+							url_repo=$(echo ${l:0:n} | cut -d\' -f2)
+						fi
+					else
+						n=$((m-4))
+						if [ ${l:n:4} == ".bz2" ]; then
+							file_repo=${l:0:n}
+						fi
+						n=$((m-3))
+						if [ ${l:n:3} == ".gz" ]; then
+							file_repo=${l:0:n}
+						fi
+						n=$((m-9))
+						if [ ${l:n:9} == "_Packages" ]; then
+							file_repo=${l:0:n}_Packages	
+						fi
+					fi
+				fi
+			done
+			wget $url_repo.bz2
+			mv Packages.bz2 ./temp/Packages.bz2
+			bzip2 -dvf ./temp/Packages.bz2
+			rm -vf ./temp/Packages.bz2
+			mv -vf ./temp/Packages $3/$file_repo
+			wget $url_repo.gz
+			mv Packages.gz ./temp/Packages.gz
+			gunzip -vf ./temp/Packages.gz
+			rm -vf ./temp/Packages.gz
+			mv -vf ./temp/Packages $3/$file_repo
+			kata=""
+		else
+			kata=$(echo "$kata $i")
+		fi
+	done
+	rm -vf ./Translation*
+	rm -rvf ./temp
+	echo "file teks berisi daftar paket di server repository telah di download"
+
+elif [ $1 == "-Ri" ]; then
+	if [ -z $2 ]; then
+		echo "folder_input tidak boleh kosong"
+		exit
+	fi
+	cp -vf $2/* /var/lib/apt/lists/
+	echo "file teks berisi daftar paket di server repository telah di pasang"
+
+elif [ $1 == "-Pr" ]; then
+	if [ -z $2 ]; then
+		echo "file_input tidak boleh kosong"
+		exit
+	fi
+	rem_packages=$(cat $2)
+	apt-get remove $rem_packages
+	echo "paket yang diminta telah selesai dibuang"
+
+elif [ $1 == "-Pl" ]; then
+	if [ -z $2 ]; then
+		echo "file_input tidak boleh kosong"
+		exit
+	fi
+	if [ -z $3 ]; then
+		echo "file_output tidak boleh kosong"
+		exit
+	fi
+	packages=$(cat $2)
+	apt-get --print-uris --yes install $packages | grep ^\' | cut -d\' -f2 > $3
+	echo "file teks berisi daftar paket yang akan di install telah dibuat"
+
+elif [ $1 == "-Pd" ]; then
+	if [ -z $2 ]; then
+		echo "file_input tidak boleh kosong"
+		exit
+	fi
+	if [ -z $3 ]; then
+		echo "folder_output tidak boleh kosong"
+		exit
+	fi
+	mkdir $3
+	wget --input-file $2
+	mv -vf ./*.deb $3
+	echo "paket yang akan diinstall telah di download"
+
+elif [ $1 == "-Pi" ]; then
+	if [ -z $2 ]; then
+		echo "file_input tidak boleh kosong"
+		exit
+	fi
+	if [ -z $3 ]; then
+		echo "folder_input tidak boleh kosong"
+		exit
+	fi
+	packages=$(cat $2)
+	cp -vf $3/*.deb /var/cache/apt/archives
+	apt-get install $packages
+	echo "paket yang diminta telah selesai di install"
+
+elif [ $1 == "-Pc" ]; then
+	apt-get clean
+	apt-get autoclean
+	apt-get autoremove
+	echo "pembersihan file-file paket di cache telah selesai"
+
+elif [ $1 == "-As" ]; then
+	if [ -z $2 ]; then
+		echo "nama_paket tidak boleh kosong"
+		exit
+	fi
+	apt-cache search $2
+
+elif [ $1 == "-Av" ]; then
+	if [ -z $2 ]; then
+		echo "nama_paket tidak boleh kosong"
+		exit
+	fi
+	apt-cache showpkg $2
+
+elif [ $1 == "-Ai" ]; then
+	if [ -z $2 ]; then
+		echo "nama_paket tidak boleh kosong"
+		exit
+	fi
+	apt-cache show $2
+
+elif [ $1 == "-Ad" ]; then
+	if [ -z $2 ]; then
+		echo "nama_paket tidak boleh kosong"
+		exit
+	fi
+	apt-cache depends $2
+
+elif [ $1 == "-Ar" ]; then
+	if [ -z $2 ]; then
+		echo "nama_paket tidak boleh kosong"
+		exit
+	fi
+	apt-cache rdepends $2
+
+elif [ $1 == "-Dc" ]; then
+	if [ -z $2 ]; then
+		echo "nama_paket tidak boleh kosong"
+		exit
+	fi
+	dpkg -l | grep $2
+
+elif [ $1 == "-Dl" ]; then
+	if [ -z $2 ]; then
+		echo "nama_paket tidak boleh kosong"
+		exit
+	fi
+	dpkg -L $2
+
+elif [ $1 == "-Do" ]; then
+	if [ -z $2 ]; then
+		echo "file_terpasang tidak boleh kosong"
+		exit
+	fi
+	dpkg -S $2
+
+elif [ $1 == "-Di" ]; then
+	if [ -z $2 ]; then
+		echo "file_input tidak boleh kosong"
+		exit
+	fi
+	dpkg --install --force-all $2
+
+elif [ $1 == "-Dr" ]; then
+	if [ -z $2 ]; then
+		echo "nama_paket tidak boleh kosong"
+		exit
+	fi
+	dpkg --remove --force-all $2
+	
+elif [ $1 == "-Dh" ]; then
+	if [ -z $2 ]; then
+		echo "file_output tidak boleh kosong"
+		exit
+	fi
+	echo "Rekaman Pengaturan paket" > $2
+	echo "Terbagi dalam 2 bagian:" >> $2
+	echo "[Segmen APT-GET] berisi rekaman dari apt-get" >> $2
+	echo "[Segmen DPKG] berisi rekaman dari dpkg" >> $2
+	echo "" >> $2
+	echo "[Segmen APT-GET]" >> $2
+	cat /var/log/apt/history.log >> $2
+	echo "" >> $2
+	echo "[Segmen DPKG]" >> $2
+	cat /var/log/dpkg.log >> $2
+	echo "" >> $2
+
+elif [ $1 == "-Dp" ]; then
+	if [ -z $2 ]; then
+		echo "folder_input tidak boleh kosong"
+		exit
+	fi
+	dpkg --build $2
+
+elif [ $1 == "-Db" ]; then
+	if [ -z $2 ]; then
+		echo "arsitektur tidak boleh kosong"
+		exit
+	fi
+	if [ -z $3 ]; then
+		echo "versi dist tidak boleh kosong"
+		exit
+	fi
+	if [ -z $4 ]; then
+		echo "folder_output tidak boleh kosong"
+		exit
+	fi
+	if [ -z $5 ]; then
+		echo "url_input tidak boleh kosong"
+		exit
+	fi
+	debootstrap --variant=minbase --arch=$2 $3 $4 $5
+
+else
+	echo "argumen tidak sah"
+	echo "ketikkan \"debman -h\" untuk bantuan"
+	exit
+fi
+

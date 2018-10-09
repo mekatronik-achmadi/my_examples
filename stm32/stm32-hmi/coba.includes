@@ -1,0 +1,11 @@
+.
+board
+ugfx
+/opt/stm32lib/chibios/os/hal/include
+/opt/stm32lib/chibios/os/hal/lib/streams
+/opt/stm32lib/chibios/os/rt/include
+/opt/stm32lib/chibios/os/various
+/opt/stm32lib/chibios/test/rt
+/opt/ugfx/ugfx_library/
+demo_console/rsc
+demo_console

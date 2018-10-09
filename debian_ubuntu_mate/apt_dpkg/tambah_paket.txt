@@ -1,0 +1,9 @@
+arduino
+arduino-core
+arduino-mighty-1284p
+arduino-mk
+
+wine1.6:i386
+winetricks:i386
+winbind:i386
+gnome-exe-thumbnailer:i386

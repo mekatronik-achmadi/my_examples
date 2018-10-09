@@ -1,0 +1,20 @@
+pkgname=stdlib-chibios
+pkgver=3.0.5
+pkgrel=1
+pkgdesc="Standard RTOS and HAL Library from ChibiOS"
+arch=('any')
+url="http://www.chibios.org/dokuwiki/doku.php"
+license=('custom')
+depends=
+makedepends=
+options=('!makeflags' 'libtool' 'staticlibs' '!strip')
+source=(ChibiOS_${pkgver}.zip::http://nchc.dl.sourceforge.net/project/chibios/ChibiOS_RT%20stable/Version%203.0.5/ChibiOS_${pkgver}.zip)
+sha256sums=('9f27a9a6ef037a28204483e04533212377f85f95426425b729fa3ebcb3a0a2fe')
+
+package() {
+	cd "$srcdir"
+	unzip -qqo ChibiOS_${pkgver}.zip
+	install -d $pkgdir/opt/chibios
+	mv -f $srcdir/ChibiOS_${pkgver} $pkgdir/opt/chibios
+	chmod -Rf 755 $pkgdir/opt/chibios
+}

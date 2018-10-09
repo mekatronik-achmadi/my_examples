@@ -1,0 +1,67 @@
+#!/bin/bash
+# skrip untuk mempercepat proses download file text index
+# ./repo-index server_repo.list folder_repo
+
+if [ -z $1 ]; then
+	echo "file_input tidak boleh kosong"
+	exit
+fi
+if [ -z $2 ]; then
+	echo "folder_output tidak boleh kosong"
+	exit
+fi
+mkdir -v $2
+mkdir -v ./temp
+kata=""
+for i in `cat -A $1`; do
+	j=${#i}
+	k=$(($j-1))
+	if [ ${i:$k} == "$" ];then
+		kata=$(echo "$kata ${i:0:$k}")
+		for l in $kata; do
+			m=${#l}
+			if [ $m -gt 5 ];then
+				if [ ${l:1:4} == "http" ];then
+					n=$((m-5))
+					if [ ${l:n:4} == ".bz2" ]; then
+						url_repo=$(echo ${l:0:n} | cut -d\' -f2)
+					fi
+					#n=$((m-4))
+					#if [ ${l:n:3} == ".gz" ]; then
+					#	url_repo=$(echo ${l:0:n} | cut -d\' -f2)
+					#fi
+				else
+					n=$((m-4))
+					if [ ${l:n:4} == ".bz2" ]; then
+						file_repo=${l:0:n}
+					fi
+					#n=$((m-3))
+					#if [ ${l:n:3} == ".gz" ]; then
+					#	file_repo=${l:0:n}
+					#fi
+					n=$((m-9))
+					if [ ${l:n:9} == "_Packages" ]; then
+						file_repo=${l:0:n}_Packages	
+					fi
+				fi
+			fi
+		done
+		wget $url_repo.bz2
+		mv Packages.bz2 ./temp/Packages.bz2
+		bzip2 -dvf ./temp/Packages.bz2
+		rm -vf ./temp/Packages.bz2
+		mv -vf ./temp/Packages $2/$file_repo
+		
+		#wget $url_repo.gz
+		#mv Packages.gz ./temp/Packages.gz
+		#gunzip -vf ./temp/Packages.gz
+		#rm -vf ./temp/Packages.gz
+		#mv -vf ./temp/Packages $2/$file_repo
+	else
+		kata=$(echo "$kata $i")
+	fi
+done
+rm -vf ./Translation*
+rm -rvf ./temp
+echo "file teks berisi daftar paket di server repository telah di download"
+

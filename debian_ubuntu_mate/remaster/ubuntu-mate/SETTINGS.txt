@@ -1,0 +1,90 @@
+# SOME-TWEAKS
+# install gnome-calculator (utopic main) or mate-calc
+##sudo chroot root-system apt-get install gnome-calculator=1:3.10.3-0ubuntu4
+##sudo chroot root-system apt-get install mate-calc
+##sudo chroot root-system make install mate-calc
+# Geany enhancement
+sudo cp -rvf repo_local/geany/tags/ root-system/usr/share/geany/
+sudo cp -vf repo_local/geany/geany.css root-system/usr/share/geany/
+sudo cp -vf repo_local/geany/geany.gtkrc root-system/usr/share/geany/
+# flash-plugin
+sudo cp -rvf repo_local/flash-firefox/install_flash_player_11_linux.x86_64/usr/ root-system/
+sudo cp -vf repo_local/flash-firefox/install_flash_player_11_linux.x86_64/libflashplayer.so root-system/usr/lib/firefox-addons/plugins/
+# additional contents
+sudo cp -rvf repo_local/muslim-contents/ root-system/home/
+sudo chown -Rvf 1000:1000 root-system/home/muslim-contents/*
+sudo chmod -Rvf a+r root-system/home/muslim-contents/*
+sudo cp -rvf repo_local/programming-contents/ root-system/home/
+sudo chown -Rvf 1000:1000 root-system/home/programming-contents/*
+sudo chmod -Rvf a+r root-system/home/programming-contents/*
+# thawab book examples (*.ki)
+sudo mkdir root-system/usr/share/thawab/db/
+sudo cp -vf repo_local/muslim-contents/books-thawab/*.ki root-system/usr/share/thawab/db/
+# thawab import Shamela book error
+# remove line contain TryExec
+# bash -c "export LANG=en_US.utf8 && thawab-gtk"
+sudo pluma root-system/usr/share/applications/thawab.desktop
+# HijriApplet autostart failed
+# remove line contain AutostartCondition
+sudo pluma root-system/etc/xdg/autostart/hijra-autostart.desktop
+sudo rm -vf root-system/usr/share/applications/hijra-applet.desktop
+sudo cp -vf root-system/etc/xdg/autostart/hijra-autostart.desktop root-system/usr/share/applications/hijra-applet.desktop
+# Monajat: Bahasa arab error
+# bash -c "export PYTHONIOENCODING=utf8 && export LANG=en_US.utf8 && /usr/bin/monajat-applet --auto"
+sudo pluma root-system/usr/share/applications/monajat.desktop
+sudo pluma root-system/etc/xdg/autostart/monajat-autostart.desktop
+sudo rm -vf root-system/usr/share/applications/monajat.desktop
+sudo cp -vf root-system/etc/xdg/autostart/monajat-autostart.desktop root-system/usr/share/applications/monajat.desktop
+# Monajat: adzan tidak sesuai area
+# komentar line 635 sampai 646
+sudo geany root-system/usr/lib/python2.7/dist-packages/monajat/applet.py
+# Minbar autostart
+sudo pluma root-system/usr/share/applications/minbar.desktop
+sudo cp -vf root-system/usr/share/applications/minbar.desktop root-system/etc/xdg/autostart/
+# Octave dengan GUI
+# remove line "TryExec"
+# Terminal=false
+# octave --force-gui
+sudo pluma root-system/usr/share/applications/www.octave.org-octave.desktop
+# remove some unused development tool shortcut
+sudo rm -vf root-system/usr/share/applications/devhelp.desktop
+sudo rm -vf root-system/usr/share/applications/assistant-qt4.desktop
+sudo rm -vf root-system/usr/share/applications/linguist-qt4.desktop
+# qtserialterminal
+sudo cp -vf repo_local/qtserialterminal/qtserialterminal root-system/usr/bin/
+sudo cp -vf /usr/share/applications/qtserialterminal.desktop root-system/usr/share/applications/
+sudo cp -vf /usr/share/applications/gtkterm.desktop root-system/usr/share/applications/
+# st-link
+sudo cp -vf repo_local/stlink-master/st-* root-system/usr/bin/
+# stm32_xplorer
+sudo cp -rvf repo_local/stm32_microxplorer/ root-system/usr/share/
+sudo chmod -Rvf a+r root-system/usr/share/stm32_microxplorer/
+sudo chmod -Rvf a+x root-system/usr/share/stm32_microxplorer/MicroXplorer.jar
+sudo cp -vf /usr/share/applications/stm32_xplorer.desktop root-system/usr/share/applications/
+# xterm dialihkan ke mate-terminal
+sudo ln -svf /usr/bin/mate-terminal root-system/usr/bin/xterm
+# Add Indonesian and Jalalayn Translation
+sudo cp -vf repo_local/zekr/id.* root-system/usr/share/zekr/res/text/trans/
+# Zekr offline Recitation
+# Add Syaikh Mishary ibn Rashid Al-Afasy
+# Move all online properties file
+sudo mkdir root-system/usr/share/zekr/res/audio/UNUSED
+sudo mv -vf root-system/usr/share/zekr/res/audio/*.properties root-system/usr/share/zekr/res/audio/UNUSED/
+# screensaver is useless and power-consuming
+sudo rm -vf root-system/usr/bin/mate-screensaver
+sudo rm -vf root-system/etc/xdg/autostart/mate-screensaver.desktop
+sudo rm -vf root-system/usr/share/applications/mate-screensaver-lock.desktop
+sudo rm -vf root-system/usr/share/applications/mate-screensaver-preferences.desktop
+# remove autostart some programs
+sudo mkdir root-system/etc/xdg/autostart/unstarted
+sudo mv -vf root-system/etc/xdg/autostart/deja-dup-monitor.desktop root-system/etc/xdg/autostart/unstarted
+sudo mv -vf root-system/etc/xdg/autostart/indicator* root-system/etc/xdg/autostart/unstarted
+sudo mv -vf root-system/etc/xdg/autostart/hijra-autostart.desktop root-system/etc/xdg/autostart/unstarted
+sudo mv -vf root-system/etc/xdg/autostart/minbar.desktop root-system/etc/xdg/autostart/unstarted
+sudo mv -vf root-system/etc/xdg/autostart/monajat-autostart.desktop root-system/etc/xdg/autostart/unstarted
+sudo mv -vf root-system/etc/xdg/autostart/onboard-autostart.desktop root-system/etc/xdg/autostart/unstarted
+sudo mv -vf root-system/etc/xdg/autostart/orca-autostart.desktop root-system/etc/xdg/autostart/unstarted
+sudo mv -vf root-system/etc/xdg/autostart/print-applet.desktop root-system/etc/xdg/autostart/unstarted
+sudo mv -vf root-system/etc/xdg/autostart/update-notifier.desktop root-system/etc/xdg/autostart/unstarted
+sudo mkdir root-system/usr/share/mate/autostart/unstarted
+sudo mv -vf root-system/usr/share/mate/autostart/tilda.desktop root-system/usr/share/mate/autostart/unstarted

@@ -1,0 +1,63 @@
+[Toplevel top]
+orientation=top
+expand=true
+size=22
+
+
+[Object brisk-menu]
+applet-iid=BriskMenuFactory::BriskMenu
+locked=true
+toplevel-id=top
+position=0
+object-type=applet
+panel-right-stick=false
+
+[Object file-browser]
+launcher-location=/usr/share/applications/caja-browser.desktop
+locked=true
+toplevel-id=top
+position=10
+object-type=launcher
+panel-right-stick=false
+
+[Object web-browser]
+launcher-location=/usr/share/applications/chromium.desktop
+locked=true
+toplevel-id=top
+position=20
+object-type=launcher
+panel-right-stick=false
+
+[Object terminal]
+launcher-location=/usr/share/applications/mate-terminal.desktop
+locked=true
+toplevel-id=top
+position=30
+object-type=launcher
+panel-right-stick=false
+
+
+
+[Object notificationarea]
+applet-iid=NotificationAreaAppletFactory::NotificationArea
+locked=true
+toplevel-id=top
+position=20
+object-type=applet
+panel-right-stick=true
+
+[Object clockapplet]
+applet-iid=ClockAppletFactory::ClockApplet
+locked=true
+toplevel-id=top
+position=10
+object-type=applet
+panel-right-stick=true
+
+[Object workspaceswitcherapplet]
+applet-iid=WnckletFactory::WorkspaceSwitcherApplet
+locked=true
+toplevel-id=top
+position=0
+object-type=applet
+panel-right-stick=true
