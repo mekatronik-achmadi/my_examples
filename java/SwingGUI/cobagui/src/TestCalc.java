@@ -134,7 +134,7 @@ public class TestCalc {
     }
 
     public static void main(String[] args){
-        JFrame frmCalc = new JFrame("TestCalc");
+        JFrame frmCalc = new JFrame("Simple Calculator");
         frmCalc.setContentPane(new TestCalc().pnlCalc);
         frmCalc.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frmCalc.pack();
