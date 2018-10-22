@@ -1,16 +1,17 @@
-import javax.swing.*;
+package com.example.TestInfo;
+
 import java.util.Enumeration;
 import java.util.Properties;
 
 /**
- * Created by achmadi on 10/20/18.
+ * Created by achmadi on 10/21/18.
  */
-public class TestInfo {
-    private String msginfo;
+public class SysInfo {
+    public SysInfo(){}
 
-    public TestInfo(){}
+    public String InfoMessage(){
 
-    private void InfoMessage(){
+        String msginfo;
         Properties msgprop;
 
         msginfo = "System Information \n";
@@ -30,7 +31,7 @@ public class TestInfo {
 //        msginfo += "\n";
 //
 //        msginfo += "User Name: " + System.getProperty("user.name") + "\n";
-//        msginfo += "User Home: " + System.getProperty("user.home") + "\n";
+//        msginfo += "User Dir : " + System.getProperty("user.dir") + "\n";
 //        msginfo += "\n";
 
         msgprop = System.getProperties();
@@ -38,7 +39,7 @@ public class TestInfo {
         msginfo += "\n\n";
 
         Enumeration<String> lstprop = (Enumeration<String>) msgprop.propertyNames();
-        while(lstprop.hasMoreElements()){
+        while (lstprop.hasMoreElements()){
             String nprop = lstprop.nextElement();
             msginfo += nprop;
             msginfo += " : ";
@@ -46,22 +47,7 @@ public class TestInfo {
             msginfo += "\n\n";
         }
 
-        msginfo += "more info: \n";
-        msginfo += "$> java -XshowSettings:all \n";
+        return msginfo;
     }
 
-    public void ConsoleInfo(){
-        InfoMessage();
-        System.out.println("============================");
-        System.out.print(msginfo);
-        System.out.println("============================");
-    }
-
-    public void DialogInfo(){
-        InfoMessage();
-        JOptionPane.showMessageDialog(null,
-                msginfo,
-                "System Information",
-                JOptionPane.INFORMATION_MESSAGE);
-    }
 }
