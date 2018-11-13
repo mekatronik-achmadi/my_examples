@@ -3,9 +3,9 @@
 
 #include "stdafx.h"
 #include "SysInfo.h"
+#include "MyConsole.h"
 #include "MyInfo.h"
 #include "MyInfoDlg.h"
-#include <stdio.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -22,8 +22,11 @@ CMyInfoDlg::CMyInfoDlg(CWnd* pParent /*=NULL*/)
 	//{{AFX_DATA_INIT(CMyInfoDlg)
 		// NOTE: the ClassWizard will add member initialization here
 	//}}AFX_DATA_INIT
+
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	mysysinfo = new SysInfo();
+	mycsl = new MyConsole();
+	mycsl->RedirectIOToConsole();
 }
 
 void CMyInfoDlg::DoDataExchange(CDataExchange* pDX)

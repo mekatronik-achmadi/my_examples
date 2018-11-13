@@ -65,6 +65,7 @@ LINK32=link.exe
 # PROP Use_Debug_Libraries 1
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /Yu"stdafx.h" /FD /GZ /c
 # ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Yu"stdafx.h" /FD /GZ /c
@@ -78,6 +79,7 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
+# SUBTRACT LINK32 /pdb:none
 
 !ENDIF 
 
@@ -88,6 +90,10 @@ LINK32=link.exe
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# Begin Source File
+
+SOURCE=.\MyConsole.cpp
+# End Source File
 # Begin Source File
 
 SOURCE=.\MyInfo.cpp
@@ -113,6 +119,10 @@ SOURCE=.\SysInfo.cpp
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\MyConsole.h
+# End Source File
 # Begin Source File
 
 SOURCE=.\MyInfo.h

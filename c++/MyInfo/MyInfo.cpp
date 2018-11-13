@@ -52,8 +52,7 @@ BOOL CMyInfoApp::InitInstance()
 #else
 	Enable3dControlsStatic();	// Call this when linking to MFC statically
 #endif
-
-	CMyInfoDlg dlg;
+  	CMyInfoDlg dlg;
 	m_pMainWnd = &dlg;
 	int nResponse = dlg.DoModal();
 	if (nResponse == IDOK)

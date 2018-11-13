@@ -5,6 +5,7 @@
 #define AFX_MYINFODLG_H__3364D287_A954_408B_A6F7_3E6BD1A42D8E__INCLUDED_
 
 #include "SysInfo.h"	// Added by ClassView
+#include "MyConsole.h"	// Added by ClassView
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
@@ -16,7 +17,8 @@ class CMyInfoDlg : public CDialog
 {
 // Construction
 public:
-	SysInfo *mysysinfo;
+	MyConsole* mycsl;
+	SysInfo* mysysinfo;
 	CString m_strResult;
 	CMyInfoDlg(CWnd* pParent = NULL);	// standard constructor
 	void MySetFont(void);
