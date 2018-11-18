@@ -50,6 +50,12 @@ void Widget_Callback(WPARAM wParam,HWND hwnd){
 		HardInfo(msg_info);
 		MessageBox(hwnd, msg_info, "Sys Info", MB_OK | MB_ICONINFORMATION);
 		break;
+	case IDM_CONSOLE:
+		sprintf(msg_info,"");
+		ExePathInfo(msg_info);
+		HardInfo(msg_info);
+		printf("%s",msg_info);
+		break;
 	}
 }
 
@@ -79,7 +85,7 @@ LRESULT CALLBACK WndProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam){
 /**
  * @brief   Main Process Routine
  */
-int WINAPI wWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,PWSTR lpCmdLine,int nCmdShow){
+int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,PSTR lpCmdLine,int nCmdShow){
 	MSG msg;
 	
 	WNDCLASSW wc = {0};
