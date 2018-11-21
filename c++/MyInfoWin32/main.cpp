@@ -47,21 +47,21 @@ void Widget_Create(HWND hwnd){
 	CreateWindowW(
 		L"Button",L"Console",
 		WS_VISIBLE | WS_CHILD,
-		20, 50, 80, 25, hwnd,
+		50, 20, 80, 25, hwnd,
 		(HMENU) IDM_CONSOLE, NULL, NULL);
 
 	/* Button Message */
 	CreateWindowW(
 		L"Button",L"Message",
 		WS_VISIBLE | WS_CHILD,
-		120, 50, 80, 25, hwnd,
+		50, 60, 80, 25, hwnd,
 		(HMENU) IDM_MESSAGE, NULL, NULL);
 
 	/* Button Exit */
 	CreateWindowW(
 		L"Button",L"Exit",
 		WS_VISIBLE | WS_CHILD,
-		220, 50, 80, 25, hwnd,
+		50, 100, 80, 25, hwnd,
 		(HMENU) IDM_EXIT, NULL, NULL);
 }
 
@@ -129,7 +129,7 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,PSTR lpCmdLine,in
 				wc.lpszClassName,
 				L"Win32 Sys Info",
 				WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-				150, 150, 320, 150,
+				150, 150, 200, 200,
 				0, 0, hInstance, 0);
 
 	while(GetMessage(&msg,NULL,0,0)){
