@@ -7,6 +7,8 @@
  */
 #include <windows.h>
 #include <stdio.h>
+#include <io.h>
+#include <fcntl.h>
 #include "sysinfo.h"
 
 #define IDM_CONSOLE 1
@@ -14,6 +16,31 @@
 #define IDM_EXIT	3
 
 char msg_info[2048];
+
+void Console_Create(void){
+    int hCrt;
+
+	FreeConsole();
+	AllocConsole();
+
+    HANDLE handle_out = GetStdHandle(STD_OUTPUT_HANDLE);
+    hCrt = _open_osfhandle((long) handle_out, _O_TEXT);
+    FILE* hf_out = _fdopen(hCrt, "w");
+    setvbuf(hf_out, NULL, _IONBF, 1);
+    *stdout = *hf_out;
+
+    HANDLE handle_err = GetStdHandle(STD_ERROR_HANDLE);
+    hCrt = _open_osfhandle((long) handle_err, _O_TEXT);
+    FILE* hf_err = _fdopen(hCrt,"w");
+    setvbuf(hf_err, NULL, _IONBF, 1);
+    *stderr = *hf_err;
+
+    HANDLE handle_in = GetStdHandle(STD_INPUT_HANDLE);
+    hCrt = _open_osfhandle((long) handle_in, _O_TEXT);
+    FILE* hf_in = _fdopen(hCrt, "r");
+    setvbuf(hf_in, NULL, _IONBF, 128);
+    *stdin = *hf_in;
+}
 
 void Widget_Create(HWND hwnd){
 	/* Button Console */
@@ -87,7 +114,7 @@ LRESULT CALLBACK WndProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam){
  */
 int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,PSTR lpCmdLine,int nCmdShow){
 	MSG msg;
-	
+
 	WNDCLASSW wc = {0};
 	wc.lpszClassName = L"Win32 SySInfo";
 	wc.hInstance = hInstance;
@@ -97,17 +124,18 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,PSTR lpCmdLine,in
 	wc.hIcon = LoadIcon(NULL,IDI_APPLICATION);
 
 	RegisterClassW(&wc);
+	Console_Create();
 	CreateWindowW(
 				wc.lpszClassName,
 				L"Win32 Sys Info",
 				WS_OVERLAPPEDWINDOW | WS_VISIBLE,
 				150, 150, 320, 150,
 				0, 0, hInstance, 0);
-					
+
 	while(GetMessage(&msg,NULL,0,0)){
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
-	}	
+	}
 
 	return (int)msg.wParam;
 }
