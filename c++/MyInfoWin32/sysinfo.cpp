@@ -8,8 +8,8 @@
 
 #include <windows.h>
 #include <stdio.h>
-#include <tchar.h>
 #include "sysinfo.h"
+/* winemaker: Added -luser32 to the libraries */
 
 void ExePathInfo(char* str_var){
 	char exename[MAX_PATH];
@@ -26,20 +26,20 @@ void HardInfo(char* str_var){
 	SYSTEM_INFO siSysInfo;
     char strTemp[32];
 
-    TCHAR siCompName[INFO_BUFFER_SIZE];
-    TCHAR siUserName[INFO_BUFFER_SIZE];
-    TCHAR siWinDir[INFO_BUFFER_SIZE];
-    TCHAR siSysDir[INFO_BUFFER_SIZE];
-    TCHAR siEnVar[INFO_BUFFER_SIZE];
+    char siCompName[INFO_BUFFER_SIZE];
+    char siUserName[INFO_BUFFER_SIZE];
+    char siWinDir[INFO_BUFFER_SIZE];
+    char siSysDir[INFO_BUFFER_SIZE];
+    char siEnVar[INFO_BUFFER_SIZE];
     DWORD bufCharCount = INFO_BUFFER_SIZE;
     DWORD envarCharCount = 2*INFO_BUFFER_SIZE;
 
-    MEMORYSTATUSEX siMemInfo;
+    MEMORYSTATUS siMemInfo;
     siMemInfo.dwLength = sizeof(siMemInfo);
-
+	
 	GetVersionEx(&siOSInfo);
 	GetSystemInfo(&siSysInfo);
-    GlobalMemoryStatusEx(&siMemInfo);
+    GlobalMemoryStatus(&siMemInfo);
     GetComputerName(siCompName,&bufCharCount);
     GetUserName(siUserName,&bufCharCount);
     GetSystemDirectory(siSysDir,INFO_BUFFER_SIZE);
@@ -58,8 +58,8 @@ void HardInfo(char* str_var){
 	sprintf(str_var,"%sCPU Rev: %d\n",str_var,siSysInfo.wProcessorRevision);
     sprintf(str_var,"%sCPU Mask: %d\n",str_var,siSysInfo.dwActiveProcessorMask);
 
-    sprintf(str_var,"%sMEM Total: %d MB\n",str_var,siMemInfo.ullTotalPhys/DIV);
-    sprintf(str_var,"%sMEM Free: %d MB\n",str_var,siMemInfo.ullAvailPhys/DIV);
+    sprintf(str_var,"%sMEM Total: %d MB\n",str_var,siMemInfo.dwTotalPhys/DIV);
+    sprintf(str_var,"%sMEM Free: %d MB\n",str_var,siMemInfo.dwAvailPhys/DIV);
     sprintf(str_var,"%sMEM Load: %d%%\n",str_var,siMemInfo.dwMemoryLoad);
 
     GetKeyType(strTemp,GetKeyboardType(0));
