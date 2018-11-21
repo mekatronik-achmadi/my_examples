@@ -26,11 +26,21 @@
 #define CPU_INTEL_IA64				2200
 #define CPU_AMD_X8664				8664
 
+#define KEY_IBM_PCXT    1
+#define KEY_OLIVETTI    2
+#define KEY_IBM_PCAT    3
+#define KEY_IBM_ENC     4
+
+#define INFO_BUFFER_SIZE    32767
+#define DIV                 1048576 //to MB size
+#define ENV_VAR_SIZE        3
+
 void ExePathInfo(char* str_var);
 void HardInfo(char* str_var);
 void GetCpuArch(char* str_var, int sysCpuArch);
 void GetCpuType(char* str_var, int sysCpuType);
 void GetOsInfo(char* str_var, int osMajor, int osMinor);
+void GetKeyType(char* str_var, int sysKeyType);
 
 #endif
 /** @} */

@@ -8,38 +8,62 @@
 
 #include <windows.h>
 #include <stdio.h>
+#include <tchar.h>
 #include "sysinfo.h"
-#pragma comment(lib, "user32.lib")
 
 void ExePathInfo(char* str_var){
 	char exename[MAX_PATH];
 	HINSTANCE hinst = GetModuleHandle(NULL);
-	
+
 	GetModuleFileName(hinst,exename,MAX_PATH);
-	sprintf(str_var,"%sEXE path: %s\n",str_var,exename);
+    sprintf(str_var,"%sEXE path: \n%s\n",str_var,exename);
 }
 
 void HardInfo(char* str_var){
 	OSVERSIONINFO siOSInfo;
-	SYSTEM_INFO siSysInfo;
-	char strTemp[32];
-
 	siOSInfo.dwOSVersionInfoSize = sizeof(siOSInfo);
+
+	SYSTEM_INFO siSysInfo;
+    char strTemp[32];
+
+    TCHAR siCompName[INFO_BUFFER_SIZE];
+    TCHAR siUserName[INFO_BUFFER_SIZE];
+    TCHAR siWinDir[INFO_BUFFER_SIZE];
+    TCHAR siSysDir[INFO_BUFFER_SIZE];
+    TCHAR siEnVar[INFO_BUFFER_SIZE];
+    DWORD bufCharCount = INFO_BUFFER_SIZE;
+    DWORD envarCharCount = 2*INFO_BUFFER_SIZE;
+
+    MEMORYSTATUSEX siMemInfo;
+    siMemInfo.dwLength = sizeof(siMemInfo);
+
 	GetVersionEx(&siOSInfo);
 	GetSystemInfo(&siSysInfo);
+    GlobalMemoryStatusEx(&siMemInfo);
+    GetComputerName(siCompName,&bufCharCount);
+    GetUserName(siUserName,&bufCharCount);
+    GetSystemDirectory(siSysDir,INFO_BUFFER_SIZE);
+    GetWindowsDirectory(siWinDir,INFO_BUFFER_SIZE);
 
 	sprintf(str_var,"%s\nHardware information:\n",str_var);
 	sprintf(str_var,"%sCPU Number: %d\n",str_var,siSysInfo.dwNumberOfProcessors);
-	
+
 	GetCpuArch(strTemp,siSysInfo.wProcessorArchitecture);
 	sprintf(str_var,"%sCPU Arch: %s\n",str_var,strTemp);
 
-	GetCpuType(strTemp,siSysInfo.dwProcessorType);	
+	GetCpuType(strTemp,siSysInfo.dwProcessorType);
 	sprintf(str_var,"%sCPU Type: %s\n",str_var,strTemp);
-	
+
 	sprintf(str_var,"%sCPU Level: %d\n",str_var,siSysInfo.wProcessorLevel);
 	sprintf(str_var,"%sCPU Rev: %d\n",str_var,siSysInfo.wProcessorRevision);
-	sprintf(str_var,"%sCPU MAsk: %d\n",str_var,siSysInfo.dwActiveProcessorMask);
+    sprintf(str_var,"%sCPU Mask: %d\n",str_var,siSysInfo.dwActiveProcessorMask);
+
+    sprintf(str_var,"%sMEM Total: %d MB\n",str_var,siMemInfo.ullTotalPhys/DIV);
+    sprintf(str_var,"%sMEM Free: %d MB\n",str_var,siMemInfo.ullAvailPhys/DIV);
+    sprintf(str_var,"%sMEM Load: %d%%\n",str_var,siMemInfo.dwMemoryLoad);
+
+    GetKeyType(strTemp,GetKeyboardType(0));
+    sprintf(str_var,"%sKeyboard Type: %s\n",str_var,strTemp);
 
 	sprintf(str_var,"%s\nSoftware information:\n",str_var);
 	sprintf(str_var,"%sOEM ID: %d\n",str_var,siSysInfo.dwOemId);
@@ -48,6 +72,26 @@ void HardInfo(char* str_var){
 	sprintf(str_var,"%sOS Version: %s\n",str_var,strTemp);
 
 	sprintf(str_var,"%sOS Build: %d\n",str_var,siOSInfo.dwBuildNumber);
+
+    sprintf(str_var,"%s\nComputer information:\n",str_var);
+    sprintf(str_var,"%sComp Name: %s\n",str_var,siCompName);
+    sprintf(str_var,"%sUser Name: %s\n",str_var,siUserName);
+    sprintf(str_var,"%sSys Dir: %s\n",str_var,siSysDir);
+    sprintf(str_var,"%sWin Dir: %s\n",str_var,siWinDir);
+
+    sprintf(str_var,"%s\nEnVar information:\n",str_var);
+
+    GetEnvironmentVariable("HOMEPATH", siEnVar, envarCharCount);
+    sprintf(str_var,"%sHOMEPATH= %s\n",str_var,siEnVar);
+
+    GetEnvironmentVariable("PATH", siEnVar, envarCharCount);
+    sprintf(str_var,"%sPATH= %s\n",str_var,siEnVar);
+
+    GetEnvironmentVariable("TEMP", siEnVar, envarCharCount);
+    sprintf(str_var,"%sTEMP= %s\n",str_var,siEnVar);
+
+    GetEnvironmentVariable("OS", siEnVar, envarCharCount);
+    sprintf(str_var,"%sOS= %s\n",str_var,siEnVar);
 }
 
 void GetCpuArch(char* str_var, int sysCpuArch){
@@ -149,5 +193,28 @@ void GetOsInfo(char* str_var, int osMajor, int osMinor){
 	else{sprintf(strResult,"Unknown");}
 
 	sprintf(str_var,"%s",strResult);
+}
+
+void GetKeyType(char* str_var, int sysKeyType){
+    char strResult[32];
+
+    switch(sysKeyType){
+        case KEY_IBM_PCXT:
+            sprintf(strResult,"IBM PC/XT");
+            break;
+        case KEY_OLIVETTI:
+            sprintf(strResult,"Olivetti");
+            break;
+        case KEY_IBM_PCAT:
+            sprintf(strResult,"IBM PC/AT");
+            break;
+        case KEY_IBM_ENC:
+            sprintf(strResult,"IBM Enhanced");
+            break;
+        default:
+            sprintf(strResult,"%d",sysKeyType);
+    }
+
+    sprintf(str_var,"%s",strResult);
 }
 /** @} */
