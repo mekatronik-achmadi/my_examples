@@ -15,7 +15,18 @@
 #define IDM_MESSAGE 2
 #define IDM_EXIT	3
 
+HFONT hFont;
 char msg_info[2048];
+
+void Setfont_Create(void){
+    LOGFONT logFont;
+    int szFont = 11;
+
+    memset(&logFont, 0, sizeof(logFont));
+    logFont.lfHeight = -szFont;
+    strcpy(logFont.lfFaceName, "Arial");
+    hFont = CreateFontIndirect(&logFont);
+}
 
 void Console_Create(void){
     int hCrt;
@@ -44,25 +55,30 @@ void Console_Create(void){
 
 void Widget_Create(HWND hwnd){
 	/* Button Console */
-	CreateWindowW(
+    HWND btnConsole = CreateWindowW(
 		L"Button",L"Console",
 		WS_VISIBLE | WS_CHILD,
-		50, 20, 80, 25, hwnd,
+        50, 10, 80, 25, hwnd,
 		(HMENU) IDM_CONSOLE, NULL, NULL);
 
 	/* Button Message */
-	CreateWindowW(
+    HWND btnMessage = CreateWindowW(
 		L"Button",L"Message",
 		WS_VISIBLE | WS_CHILD,
-		50, 60, 80, 25, hwnd,
+        50, 50, 80, 25, hwnd,
 		(HMENU) IDM_MESSAGE, NULL, NULL);
 
 	/* Button Exit */
-	CreateWindowW(
+    HWND btnExit = CreateWindowW(
 		L"Button",L"Exit",
 		WS_VISIBLE | WS_CHILD,
-		50, 100, 80, 25, hwnd,
+        50, 90, 80, 25, hwnd,
 		(HMENU) IDM_EXIT, NULL, NULL);
+
+    Setfont_Create();
+    SendMessage(btnConsole, WM_SETFONT, (WPARAM)hFont, (LPARAM)MAKELONG(TRUE, 0));
+    SendMessage(btnMessage, WM_SETFONT, (WPARAM)hFont, (LPARAM)MAKELONG(TRUE, 0));
+    SendMessage(btnExit, WM_SETFONT, (WPARAM)hFont, (LPARAM)MAKELONG(TRUE, 0));
 }
 
 void Widget_Callback(WPARAM wParam,HWND hwnd){
@@ -96,7 +112,7 @@ void Widget_Callback(WPARAM wParam,HWND hwnd){
 LRESULT CALLBACK WndProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam){
 	switch(msg){
 	case WM_CREATE:
-		Widget_Create(hwnd); break;
+        Widget_Create(hwnd); break;
 	case WM_COMMAND:
 		Widget_Callback(wParam,hwnd); break;
 	case WM_DESTROY:
@@ -129,7 +145,7 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,PSTR lpCmdLine,in
 				wc.lpszClassName,
 				L"Win32 Sys Info",
 				WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-				150, 150, 200, 200,
+                150, 150, 200, 150,
 				0, 0, hInstance, 0);
 
 	while(GetMessage(&msg,NULL,0,0)){
