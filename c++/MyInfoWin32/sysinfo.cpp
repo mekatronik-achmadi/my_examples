@@ -19,7 +19,7 @@ void ExePathInfo(char* str_var){
     sprintf(str_var,"%sEXE path: \n%s\n",str_var,exename);
 }
 
-void HardInfo(char* str_var){
+void SysAllInfo(char* str_var){
 	OSVERSIONINFO siOSInfo;
 	siOSInfo.dwOSVersionInfoSize = sizeof(siOSInfo);
 

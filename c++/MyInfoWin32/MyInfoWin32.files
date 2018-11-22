@@ -1,3 +1,5 @@
 main.cpp
 sysinfo.cpp
+mapp.cpp
 sysinfo.h
+mapp.h

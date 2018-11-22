@@ -36,7 +36,7 @@
 #define ENV_VAR_SIZE        3
 
 void ExePathInfo(char* str_var);
-void HardInfo(char* str_var);
+void SysAllInfo(char* str_var);
 void GetCpuArch(char* str_var, int sysCpuArch);
 void GetCpuType(char* str_var, int sysCpuType);
 void GetOsInfo(char* str_var, int osMajor, int osMinor);
