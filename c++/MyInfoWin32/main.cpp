@@ -14,6 +14,7 @@
 #define IDM_CONSOLE 1
 #define IDM_MESSAGE 2
 #define IDM_EXIT	3
+#define IDM_ABOUT	4
 
 HFONT hFont;
 char msg_info[2048];
@@ -58,27 +59,45 @@ void Widget_Create(HWND hwnd){
     HWND btnConsole = CreateWindowW(
 		L"Button",L"Console",
 		WS_VISIBLE | WS_CHILD,
-        50, 10, 80, 25, hwnd,
+        70, 20, 80, 25, hwnd,
 		(HMENU) IDM_CONSOLE, NULL, NULL);
 
 	/* Button Message */
     HWND btnMessage = CreateWindowW(
 		L"Button",L"Message",
 		WS_VISIBLE | WS_CHILD,
-        50, 50, 80, 25, hwnd,
+        70, 60, 80, 25, hwnd,
 		(HMENU) IDM_MESSAGE, NULL, NULL);
 
 	/* Button Exit */
     HWND btnExit = CreateWindowW(
 		L"Button",L"Exit",
 		WS_VISIBLE | WS_CHILD,
-        50, 90, 80, 25, hwnd,
+        70, 100, 80, 25, hwnd,
 		(HMENU) IDM_EXIT, NULL, NULL);
 
     Setfont_Create();
     SendMessage(btnConsole, WM_SETFONT, (WPARAM)hFont, (LPARAM)MAKELONG(TRUE, 0));
     SendMessage(btnMessage, WM_SETFONT, (WPARAM)hFont, (LPARAM)MAKELONG(TRUE, 0));
     SendMessage(btnExit, WM_SETFONT, (WPARAM)hFont, (LPARAM)MAKELONG(TRUE, 0));
+}
+
+void Menubar_Create(HWND hwnd){
+	HMENU hMenu, hSubMenu;
+	
+	hMenu = CreateMenu();
+
+	hSubMenu = CreatePopupMenu();
+	AppendMenu(hSubMenu, MF_STRING, IDM_CONSOLE, "&Console");
+	AppendMenu(hSubMenu, MF_STRING, IDM_MESSAGE, "&Message");
+	AppendMenu(hSubMenu, MF_STRING, IDM_EXIT, "E&xit");
+	AppendMenu(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu, "&File");
+
+	hSubMenu = CreatePopupMenu();
+	AppendMenu(hSubMenu, MF_STRING, IDM_ABOUT, "&About");
+	AppendMenu(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu, "&Help");
+
+	SetMenu(hwnd, hMenu);
 }
 
 void Widget_Callback(WPARAM wParam,HWND hwnd){
@@ -99,6 +118,9 @@ void Widget_Callback(WPARAM wParam,HWND hwnd){
 		HardInfo(msg_info);
 		printf("%s",msg_info);
 		break;
+	case IDM_ABOUT:
+		MessageBox(hwnd, "Simple System Information Program", "About", MB_OK | MB_ICONINFORMATION);
+		break;
 	}
 }
 
@@ -112,7 +134,7 @@ void Widget_Callback(WPARAM wParam,HWND hwnd){
 LRESULT CALLBACK WndProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam){
 	switch(msg){
 	case WM_CREATE:
-        Widget_Create(hwnd); break;
+        Widget_Create(hwnd); Menubar_Create(hwnd); break;
 	case WM_COMMAND:
 		Widget_Callback(wParam,hwnd); break;
 	case WM_DESTROY:
@@ -145,7 +167,7 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,PSTR lpCmdLine,in
 				wc.lpszClassName,
 				L"Win32 Sys Info",
 				WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-                150, 150, 200, 150,
+                150, 150, 250, 200,
 				0, 0, hInstance, 0);
 
 	while(GetMessage(&msg,NULL,0,0)){
