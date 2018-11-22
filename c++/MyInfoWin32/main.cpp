@@ -13,8 +13,9 @@
 
 #define IDM_CONSOLE 1
 #define IDM_MESSAGE 2
-#define IDM_EXIT	3
-#define IDM_ABOUT	4
+#define IDM_TEXT	3
+#define IDM_EXIT	4
+#define IDM_ABOUT	5
 
 HFONT hFont;
 char msg_info[2048];
@@ -84,12 +85,13 @@ void Widget_Create(HWND hwnd){
 
 void Menubar_Create(HWND hwnd){
 	HMENU hMenu, hSubMenu;
-	
+
 	hMenu = CreateMenu();
 
 	hSubMenu = CreatePopupMenu();
 	AppendMenu(hSubMenu, MF_STRING, IDM_CONSOLE, "&Console");
 	AppendMenu(hSubMenu, MF_STRING, IDM_MESSAGE, "&Message");
+	AppendMenu(hSubMenu, MF_STRING, IDM_TEXT, "&Save txt");
 	AppendMenu(hSubMenu, MF_STRING, IDM_EXIT, "E&xit");
 	AppendMenu(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu, "&File");
 
@@ -100,6 +102,33 @@ void Menubar_Create(HWND hwnd){
 	SetMenu(hwnd, hMenu);
 }
 
+void TextInfo_Write(void){
+	HANDLE hFile;
+	DWORD wmWritten;
+
+	hFile = CreateFile("sysinfo.txt",
+                GENERIC_WRITE | GENERIC_READ,
+                0,
+                NULL,
+                CREATE_ALWAYS,
+                FILE_ATTRIBUTE_TEMPORARY,
+                NULL);
+
+	WriteFile(hFile,
+			msg_info,
+			(DWORD)strlen(msg_info),
+			&wmWritten,
+			NULL);
+
+	CloseHandle(hFile);
+}
+
+void MsgInfo(void){
+	sprintf(msg_info,"");
+	ExePathInfo(msg_info);
+	HardInfo(msg_info);
+}
+
 void Widget_Callback(WPARAM wParam,HWND hwnd){
 	switch(LOWORD(wParam)){
 	/* Button Exit */
@@ -107,17 +136,20 @@ void Widget_Callback(WPARAM wParam,HWND hwnd){
 		PostQuitMessage(0); break;
 	/* Button Message */
 	case IDM_MESSAGE:
-		sprintf(msg_info,"");
-		ExePathInfo(msg_info);
-		HardInfo(msg_info);
+		MsgInfo();
 		MessageBox(hwnd, msg_info, "Sys Info", MB_OK | MB_ICONINFORMATION);
 		break;
+	/* Button Console */
 	case IDM_CONSOLE:
-		sprintf(msg_info,"");
-		ExePathInfo(msg_info);
-		HardInfo(msg_info);
+		MsgInfo();
 		printf("%s",msg_info);
 		break;
+	/* Button Text */
+	case IDM_TEXT:
+		MsgInfo();
+		TextInfo_Write();
+		break;
+	/* Button About */
 	case IDM_ABOUT:
 		MessageBox(hwnd, "Simple System Information Program", "About", MB_OK | MB_ICONINFORMATION);
 		break;

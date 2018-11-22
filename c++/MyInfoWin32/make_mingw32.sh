@@ -10,7 +10,7 @@ fi
 #if [ ! -f /usr/bin/winegcc ];then
 #if [ ! -f /usr/bin/x86_64-w64-mingw32-gcc ];then
 if [ ! -f /usr/bin/i686-w64-mingw32-gcc ];then
-	echo "winegcc not found"
+	echo "mingw32-gcc not found"
 	exit
 fi
 
@@ -20,7 +20,7 @@ if [ ! -f /usr/bin/sed ];then
 fi
 
 if [ -z "$EXENAME" ];then
-	echo "usage: ./buildwine.sh EXE_NAME"
+	echo "usage: ./make_mingw32.sh EXE_NAME"
 	exit
 fi
 
