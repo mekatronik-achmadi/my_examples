@@ -121,6 +121,8 @@ void TextInfo_Write(void){
 
 void MsgInfo(void){
 	sprintf(msg_info,"");
+	ExePathInfo(msg_info);
+	SysAllInfo(msg_info);
 }
 
 void Widget_Callback(WPARAM wParam,HWND hwnd){
