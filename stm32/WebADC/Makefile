@@ -98,7 +98,7 @@ include $(CHIBIOS)/os/hal/osal/rt/osal.mk
 include $(CHIBIOS)/os/rt/rt.mk
 include $(CHIBIOS)/os/rt/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
 # Other files (optional).
-include ./accel/accel.mk
+#include ./accel/accel.mk
 #include $(CHIBIOS)/test/rt/test.mk
 
 # Define linker script file here
@@ -120,7 +120,7 @@ CSRC = $(STARTUPSRC) \
         $(CHIBIOS)/os/hal/lib/streams/chprintf.c \
         $(CHIBIOS)/os/hal/lib/streams/memstreams.c \
         $(CHIBIOS)/os/hal/lib/streams/nullstreams.c \
-       main.c shell.c din_adc.c din_uart.c din_web.c din_accel.c
+       main.c shell.c din_adc.c din_uart.c din_web.c din_mpu.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.

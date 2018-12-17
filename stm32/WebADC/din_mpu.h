@@ -26,9 +26,16 @@
 #include "stdlib.h"
 #include "stdio.h"
 
-#include "i2cdev_chibi.h"
-#include "MPU6050.h"
+#include "reg_accel.h"
 
-void d_accel_start(void);
+#define MPU_DEBUG   TRUE
+#define MPU_ADDR    MPU_ADDR_LO
+
+void d_mpu_start(void);
+void d_mpu_setup(void);
+void d_mpu_whoAmI(void);
+
+void d_mpu_i2cWrite(u_int8_t addr, u_int8_t value);
+void d_mpu_i2cReadData(u_int8_t addr, u_int8_t length);
 
 #endif // DIN_ACCEL_H

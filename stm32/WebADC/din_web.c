@@ -48,7 +48,7 @@ static void cmd_send0(BaseSequentialStream *chp, int argc, char *argv[]) {
   (void)argc;
   (void)chp;
 
-#if SERVER_NOTIF
+#ifdef SERVER_NOTIF
   chprintf((BaseSequentialStream *)&SD1,"ReqChannel=0\r\n");
 #endif
   chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=0,8\r\n");
@@ -65,7 +65,7 @@ static void cmd_send1(BaseSequentialStream *chp, int argc, char *argv[]) {
     (void)argc;
     (void)chp;
 
-#if SERVER_NOTIF
+#ifdef SERVER_NOTIF
     chprintf((BaseSequentialStream *)&SD1,"ReqChannel=1\r\n");
 #endif
   chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=1,8\r\n");
@@ -82,7 +82,7 @@ static void cmd_send2(BaseSequentialStream *chp, int argc, char *argv[]) {
     (void)argc;
     (void)chp;
 
-#if SERVER_NOTIF
+#ifdef SERVER_NOTIF
     chprintf((BaseSequentialStream *)&SD1,"ReqChannel=2\r\n");
 #endif
   chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=2,8\r\n");
@@ -99,7 +99,7 @@ static void cmd_send3(BaseSequentialStream *chp, int argc, char *argv[]) {
     (void)argc;
     (void)chp;
 
-#if SERVER_NOTIF
+#ifdef SERVER_NOTIF
     chprintf((BaseSequentialStream *)&SD1,"ReqChannel=3\r\n");
 #endif
   chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=3,8\r\n");
@@ -116,7 +116,7 @@ static void cmd_send4(BaseSequentialStream *chp, int argc, char *argv[]) {
     (void)argc;
     (void)chp;
 
-#if SERVER_NOTIF
+#ifdef SERVER_NOTIF
     chprintf((BaseSequentialStream *)&SD1,"ReqChannel=4\r\n");
 #endif
   chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=4,8\r\n");
@@ -133,7 +133,7 @@ static void cmd_send5(BaseSequentialStream *chp, int argc, char *argv[]) {
     (void)argc;
     (void)chp;
 
-#if SERVER_NOTIF
+#ifdef SERVER_NOTIF
     chprintf((BaseSequentialStream *)&SD1,"ReqChannel=5\r\n");
 #endif
   chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=5,8\r\n");
@@ -150,7 +150,7 @@ static void cmd_send6(BaseSequentialStream *chp, int argc, char *argv[]) {
     (void)argc;
     (void)chp;
 
-#if SERVER_NOTIF
+#ifdef SERVER_NOTIF
     chprintf((BaseSequentialStream *)&SD1,"ReqChannel=6\r\n");
 #endif
   chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=6,8\r\n");
@@ -167,7 +167,7 @@ static void cmd_send7(BaseSequentialStream *chp, int argc, char *argv[]) {
     (void)argc;
     (void)chp;
 
-#if SERVER_NOTIF
+#ifdef SERVER_NOTIF
     chprintf((BaseSequentialStream *)&SD1,"ReqChannel=7\r\n");
 #endif
   chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=7,8\r\n");

@@ -4,7 +4,7 @@
 #include "din_adc.h"
 #include "din_web.h"
 #include "din_uart.h"
-#include "din_accel.h"
+#include "din_mpu.h"
 
 static THD_WORKING_AREA(waLED, 128);
 static THD_FUNCTION(thdLED, arg) {
@@ -25,7 +25,7 @@ int main(void) {
 
   d_adc_start();
   d_uart_start();
-  d_web_start();
+//  d_web_start();
 
   palSetPadMode(GPIOC,13,PAL_MODE_OUTPUT_PUSHPULL);
   palClearPad(GPIOC,13);
@@ -33,14 +33,18 @@ int main(void) {
   chThdCreateStatic(waLED, sizeof(waLED), NORMALPRIO, thdLED, NULL);
 
   d_uart_info();
-  d_accel_start();
+  d_mpu_start();
 
-#if SERVER_NOTIF
+#ifdef SERVER_NOTIF
   chprintf((BaseSequentialStream *)&SD1,"All Setup Finished\r\n");
 #endif
 
+  chThdSleepMilliseconds(500);
+  d_mpu_whoAmI();
+
   while(true){
-    d_web_term();
-    chThdSleepMilliseconds(100);
+//    d_web_term();
+    d_mpu_i2cReadData(0x3B, 14);
+    chThdSleepMilliseconds(1000);
   }
 }
