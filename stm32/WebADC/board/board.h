@@ -39,7 +39,7 @@
 #define STM32F10X_MD
 
 /*
- * Defini ukuran standar alokasi memori untuk thread dan shell
+ * Definisi ukuran standar alokasi memori untuk thread dan shell
  */
 #define SHELL_WA_SIZE   THD_WORKING_AREA_SIZE(256)
 #define THREAD_WA_SIZE  THD_WORKING_AREA_SIZE(64)

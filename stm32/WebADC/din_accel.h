@@ -13,31 +13,22 @@
   0. You just DO WHAT THE FUCK YOU WANT TO.
  */
 
-/**
- * @file    din_adc.h
- * @brief   ADC (for Mic) routine header.
- *
- * @addtogroup ADC
- * @{
- */
-
-#ifndef DIN_ADC_H
-#define DIN_ADC_H
+#ifndef DIN_ACCEL_H
+#define DIN_ACCEL_H
 
 #include "ch.h"
 #include "hal.h"
 
-/**
- * @brief   ADC channel number.
- */
-#define ADC_GRP_NUM_CHANNELS   1
+#include "chprintf.h"
+#include "shell.h"
 
-/**
- * @brief   ADC buffer size.
- */
-#define ADC_GRP_BUF_DEPTH      10
+#include "math.h"
+#include "stdlib.h"
+#include "stdio.h"
 
-void d_adc_start(void);
+#include "i2cdev_chibi.h"
+#include "MPU6050.h"
 
-#endif // DIN_ADC_H
-/** @} */
+void d_accel_start(void);
+
+#endif // DIN_ACCEL_H

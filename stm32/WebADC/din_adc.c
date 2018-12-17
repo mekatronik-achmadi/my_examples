@@ -15,7 +15,7 @@
 
 /**
  * @file    din_adc.c
- * @brief   ADC routine code.
+ * @brief   ADC (for Mic) routine code.
  *
  * @addtogroup ADC
  * @{

@@ -4,6 +4,7 @@
 #include "din_adc.h"
 #include "din_web.h"
 #include "din_uart.h"
+#include "din_accel.h"
 
 static THD_WORKING_AREA(waLED, 128);
 static THD_FUNCTION(thdLED, arg) {
@@ -32,6 +33,8 @@ int main(void) {
   chThdCreateStatic(waLED, sizeof(waLED), NORMALPRIO, thdLED, NULL);
 
   d_uart_info();
+  d_accel_start();
+
 #if SERVER_NOTIF
   chprintf((BaseSequentialStream *)&SD1,"All Setup Finished\r\n");
 #endif
