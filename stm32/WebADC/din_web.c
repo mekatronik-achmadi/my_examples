@@ -1,7 +1,36 @@
+/*
+              DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+
+ Copyright (C) 2018 Achmadi S.T.
+
+ Everyone is permitted to copy and distribute verbatim or modified
+ copies of this license document, and changing it is allowed as long
+ as the name is changed.
+
+            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+
+  0. You just DO WHAT THE FUCK YOU WANT TO.
+ */
+
+/**
+ * @file    din_web.c
+ * @brief   Web server routine code.
+ *
+ * @addtogroup Communication
+ * @{
+ */
+
 #include "din_web.h"
 
+/**
+ * @brief   Shell handler variable.
+ */
 static thread_t *shelltp = NULL;
 
+/**
+ * @brief   Text sending function.
+ */
 static void text_http(void){
     chThdSleepMilliseconds(100);
     chprintf((BaseSequentialStream *)&SD2,"WebOK\r\n");
@@ -10,6 +39,9 @@ static void text_http(void){
     chThdSleepMilliseconds(100);
 }
 
+/**
+ * @brief   Channel 0 handler function.
+ */
 static void cmd_send0(BaseSequentialStream *chp, int argc, char *argv[]) {
 
   (void)argv;
@@ -24,6 +56,9 @@ static void cmd_send0(BaseSequentialStream *chp, int argc, char *argv[]) {
   chprintf((BaseSequentialStream *)&SD2,"AT+CIPCLOSE=0\r\n");
 }
 
+/**
+ * @brief   Channel 1 handler function.
+ */
 static void cmd_send1(BaseSequentialStream *chp, int argc, char *argv[]) {
 
     (void)argv;
@@ -38,6 +73,9 @@ static void cmd_send1(BaseSequentialStream *chp, int argc, char *argv[]) {
   chprintf((BaseSequentialStream *)&SD2,"AT+CIPCLOSE=1\r\n");
 }
 
+/**
+ * @brief   Channel 2 handler function.
+ */
 static void cmd_send2(BaseSequentialStream *chp, int argc, char *argv[]) {
 
     (void)argv;
@@ -52,6 +90,9 @@ static void cmd_send2(BaseSequentialStream *chp, int argc, char *argv[]) {
   chprintf((BaseSequentialStream *)&SD2,"AT+CIPCLOSE=2\r\n");
 }
 
+/**
+ * @brief   Channel 3 handler function.
+ */
 static void cmd_send3(BaseSequentialStream *chp, int argc, char *argv[]) {
 
     (void)argv;
@@ -66,6 +107,9 @@ static void cmd_send3(BaseSequentialStream *chp, int argc, char *argv[]) {
   chprintf((BaseSequentialStream *)&SD2,"AT+CIPCLOSE=3\r\n");
 }
 
+/**
+ * @brief   Channel 4 handler function.
+ */
 static void cmd_send4(BaseSequentialStream *chp, int argc, char *argv[]) {
 
     (void)argv;
@@ -80,6 +124,9 @@ static void cmd_send4(BaseSequentialStream *chp, int argc, char *argv[]) {
   chprintf((BaseSequentialStream *)&SD2,"AT+CIPCLOSE=4\r\n");
 }
 
+/**
+ * @brief   Channel 5 handler function.
+ */
 static void cmd_send5(BaseSequentialStream *chp, int argc, char *argv[]) {
 
     (void)argv;
@@ -94,6 +141,9 @@ static void cmd_send5(BaseSequentialStream *chp, int argc, char *argv[]) {
   chprintf((BaseSequentialStream *)&SD2,"AT+CIPCLOSE=5\r\n");
 }
 
+/**
+ * @brief   Channel 6 handler function.
+ */
 static void cmd_send6(BaseSequentialStream *chp, int argc, char *argv[]) {
 
     (void)argv;
@@ -108,6 +158,9 @@ static void cmd_send6(BaseSequentialStream *chp, int argc, char *argv[]) {
   chprintf((BaseSequentialStream *)&SD2,"AT+CIPCLOSE=6\r\n");
 }
 
+/**
+ * @brief   Channel 7 handler function.
+ */
 static void cmd_send7(BaseSequentialStream *chp, int argc, char *argv[]) {
 
     (void)argv;
@@ -122,6 +175,9 @@ static void cmd_send7(BaseSequentialStream *chp, int argc, char *argv[]) {
   chprintf((BaseSequentialStream *)&SD2,"AT+CIPCLOSE=7\r\n");
 }
 
+/**
+ * @brief   Shell commands enumeration.
+ */
 static const ShellCommand commands[] = {
     {"0,CONNECT", cmd_send0},
     {"1,CONNECT", cmd_send1},
@@ -134,11 +190,17 @@ static const ShellCommand commands[] = {
     {NULL, NULL}
 };
 
+/**
+ * @brief   Shell configuration variable.
+ */
 static const ShellConfig shell_cfg = {
     (BaseSequentialStream *)&SD2,
     commands
 };
 
+/**
+ * @brief   Web server start function.
+ */
 void d_web_start(void){
     palSetPadMode(GPIOA,2,PAL_MODE_STM32_ALTERNATE_PUSHPULL); //TX
     palSetPadMode(GPIOA,3,PAL_MODE_INPUT); //RX
@@ -150,6 +212,9 @@ void d_web_start(void){
     shellInit();
 }
 
+/**
+ * @brief   Web server shell function.
+ */
 void d_web_term(void){
     if (!shelltp)
       shelltp = shellCreate(&shell_cfg, SHELL_WA_SIZE, NORMALPRIO);
@@ -159,6 +224,9 @@ void d_web_term(void){
     }
 }
 
+/**
+ * @brief   Web server setup function.
+ */
 void d_web_setup(void){
     chprintf((BaseSequentialStream *)&SD2,"AT+RST\r\n");
     chThdSleepMilliseconds(1000);
@@ -171,3 +239,4 @@ void d_web_setup(void){
     chprintf((BaseSequentialStream *)&SD2,"AT+CIPSERVER=1,80\r\n");
     chThdSleepMilliseconds(100);
 }
+/** @} */

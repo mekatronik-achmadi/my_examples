@@ -25,7 +25,7 @@
  * Board identifier.
  */
 #define BOARD_STM32_TF
-#define BOARD_NAME              "STM32_DIDIN"
+#define BOARD_NAME              "STM32_ACHMADI"
 
 /*
  * Board frequencies.

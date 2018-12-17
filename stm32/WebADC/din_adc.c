@@ -1,5 +1,31 @@
+/*
+              DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+
+ Copyright (C) 2018 Achmadi S.T.
+
+ Everyone is permitted to copy and distribute verbatim or modified
+ copies of this license document, and changing it is allowed as long
+ as the name is changed.
+
+            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+
+  0. You just DO WHAT THE FUCK YOU WANT TO.
+ */
+
+/**
+ * @file    din_adc.c
+ * @brief   ADC routine code.
+ *
+ * @addtogroup ADC
+ * @{
+ */
+
 #include "din_adc.h"
 
+/**
+ * @brief   ADC buffer variable.
+ */
 static adcsample_t samples[ADC_GRP_NUM_CHANNELS * ADC_GRP_BUF_DEPTH];
 adcsample_t adc0;
 uint32_t sum_adc0;
@@ -16,6 +42,9 @@ void adccb(ADCDriver *adcp, adcsample_t *buffer, size_t n){
    }
  }
 
+/**
+ * @brief   ADC configuration variable.
+ */
 static const ADCConversionGroup adcgrpcfg = {
     FALSE,
     ADC_GRP_NUM_CHANNELS,
@@ -43,8 +72,13 @@ static THD_FUNCTION(thdADC, arg) {
     }
 }
 
+/**
+ * @brief   ADC start function.
+ */
 void d_adc_start(void){
     palSetPadMode(GPIOA,0,PAL_MODE_INPUT_ANALOG);
     adcStart(&ADCD1, NULL);
     chThdCreateStatic(waADC, sizeof(waADC), NORMALPRIO, thdADC, NULL);
 }
+
+/** @} */

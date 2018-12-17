@@ -30,9 +30,12 @@ int main(void) {
   palClearPad(GPIOC,13);
 
   chThdCreateStatic(waLED, sizeof(waLED), NORMALPRIO, thdLED, NULL);
+
+  d_uart_info();
 #if SERVER_NOTIF
   chprintf((BaseSequentialStream *)&SD1,"All Setup Finished\r\n");
 #endif
+
   while(true){
     d_web_term();
     chThdSleepMilliseconds(100);
