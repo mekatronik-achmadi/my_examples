@@ -35,13 +35,18 @@
 #include "stdio.h"
 
 #include "din_adc.h"
+#include "din_mpu.h"
 
 /**
  * @brief   Notification Message.
  */
-#ifndef SERVER_NOTIF
-    #define SERVER_NOTIF TRUE
-#endif
+#define SERVER_NOTIF TRUE
+
+/*
+ * Definisi ukuran standar alokasi memori untuk thread dan shell
+ */
+#define SHELL_WA_SIZE   THD_WORKING_AREA_SIZE(512)
+#define THREAD_WA_SIZE  THD_WORKING_AREA_SIZE(128)
 
 void d_web_start(void);
 void d_web_term(void);

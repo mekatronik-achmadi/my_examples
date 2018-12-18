@@ -5,6 +5,8 @@ board/board.mk
 chconf.h
 din_adc.c
 din_adc.h
+din_fuzzy.c
+din_fuzzy.h
 din_mpu.c
 din_mpu.h
 din_uart.c
@@ -16,7 +18,7 @@ din_web.h
 halconf.h
 main.c
 mcuconf.h
-reg_accel.h
+reg_mpu.h
 shell.c
 shell.h
 Makefile

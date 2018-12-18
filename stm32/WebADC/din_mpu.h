@@ -26,9 +26,9 @@
 #include "stdlib.h"
 #include "stdio.h"
 
-#include "reg_accel.h"
+#include "reg_mpu.h"
 
-#define MPU_DEBUG   TRUE
+#define MPU_DEBUG   FALSE
 #define MPU_ADDR    MPU_ADDR_LO
 
 void d_mpu_start(void);

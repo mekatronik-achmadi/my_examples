@@ -107,20 +107,20 @@ LDSCRIPT= $(BOARDINC)/STM32F103x8.ld
 
 # C sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
-CSRC = $(STARTUPSRC) \
-       $(KERNSRC) \
-       $(PORTSRC) \
-       $(OSALSRC) \
-       $(HALSRC) \
-       $(PLATFORMSRC) \
-       $(BOARDSRC) \
-       	$(ACCELSRC) \
+CSRC =  $(STARTUPSRC) \
+        $(KERNSRC) \
+        $(PORTSRC) \
+        $(OSALSRC) \
+        $(HALSRC) \
+        $(PLATFORMSRC) \
+        $(BOARDSRC) \
+        $(ACCELSRC) \
         $(CHIBIOS)/os/various/syscalls.c \
         $(CHIBIOS)/os/various/evtimer.c \
         $(CHIBIOS)/os/hal/lib/streams/chprintf.c \
         $(CHIBIOS)/os/hal/lib/streams/memstreams.c \
         $(CHIBIOS)/os/hal/lib/streams/nullstreams.c \
-       main.c shell.c din_adc.c din_uart.c din_web.c din_mpu.c
+        main.c shell.c din_adc.c din_uart.c din_web.c din_mpu.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -202,7 +202,7 @@ CPPWARN = -Wall -Wextra -Wundef
 #
 
 # List all user C define here, like -D_DEBUG=1
-UDEFS =
+UDEFS = -DCHPRINTF_USE_FLOAT=TRUE
 
 # Define ASM defines here
 UADEFS =

@@ -36,6 +36,8 @@ void d_uart_start(void){
  * @brief   UART-1 info message function.
  */
 void d_uart_info(void){
+#if UART_INFO
+
     chprintf((BaseSequentialStream *)&SD1, "Kernel:       %s\r\n", CH_KERNEL_VERSION);
 
 #ifdef PORT_COMPILER_NAME
@@ -66,6 +68,8 @@ chprintf((BaseSequentialStream *)&SD1, "Platform:     %s\r\n", PLATFORM_NAME);
     #endif
 #endif
 
-    chprintf((BaseSequentialStream *)&SD1, "written by: Achmadi S.T. \r\n", BOARD_NAME);
+#endif
+
+    chprintf((BaseSequentialStream *)&SD1, "Firmware written by: Achmadi S.T. \r\n", BOARD_NAME);
 }
 /** @} */

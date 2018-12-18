@@ -34,6 +34,8 @@
 #include "stdlib.h"
 #include "stdio.h"
 
+#define UART_INFO   TRUE
+
 void d_uart_start(void);
 void d_uart_info(void);
 

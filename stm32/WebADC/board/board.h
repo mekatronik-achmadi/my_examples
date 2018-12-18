@@ -39,12 +39,6 @@
 #define STM32F10X_MD
 
 /*
- * Definisi ukuran standar alokasi memori untuk thread dan shell
- */
-#define SHELL_WA_SIZE   THD_WORKING_AREA_SIZE(256)
-#define THREAD_WA_SIZE  THD_WORKING_AREA_SIZE(64)
-
-/*
  * IO pins assignments.
  */
 //#define GPIOA_BUTTON            0
