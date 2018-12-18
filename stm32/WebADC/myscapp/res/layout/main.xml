@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:weightSum="1">
+
+    <TextView
+            android:layout_width="75dp"
+            android:layout_height="20dp"
+            android:id="@+id/txtAx"
+            android:background="@android:color/background_light"
+            android:textColor="@android:color/background_dark"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/txtMic"
+            android:layout_marginStart="21dp"/>
+
+    <Button
+            android:layout_width="180dp"
+            android:layout_height="50dp"
+            android:text="@string/btnReq"
+            android:id="@+id/btnReq"
+            android:layout_marginTop="51dp"
+            android:layout_below="@+id/txtOut"
+            android:layout_toStartOf="@+id/txtAz"/>
+
+    <TextView
+            android:layout_width="360dp"
+            android:layout_height="200dp"
+            android:id="@+id/txtOut"
+            android:background="@android:color/background_light"
+            android:textColor="@android:color/background_dark"
+            android:gravity="bottom"
+            android:layout_below="@+id/txtAx"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="26dp"/>
+
+    <TextView android:layout_width="75dp"
+              android:layout_height="20dp"
+              android:id="@+id/txtAy"
+              android:background="@android:color/background_light"
+              android:textColor="@android:color/background_dark"
+              android:layout_alignBaseline="@+id/txtAx"
+              android:layout_alignBottom="@+id/txtAx"
+              android:layout_toEndOf="@+id/txtAx"
+              android:layout_marginStart="18dp"/>
+
+    <TextView android:layout_width="75dp"
+              android:layout_height="20dp"
+              android:id="@+id/txtAz"
+              android:background="@android:color/background_light"
+              android:textColor="@android:color/background_dark"
+              android:layout_alignParentTop="true"
+              android:layout_alignEnd="@+id/txtOut"/>
+
+    <TextView android:layout_width="75dp"
+              android:layout_height="20dp"
+              android:id="@+id/txtMic"
+              android:background="@android:color/background_light"
+              android:textColor="@android:color/background_dark"
+              android:layout_alignBaseline="@+id/txtAx"
+              android:layout_alignBottom="@+id/txtAx"
+              android:layout_alignStart="@+id/txtOut"/>
+</RelativeLayout>
+
