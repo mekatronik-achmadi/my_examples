@@ -1,16 +1,85 @@
+/*
+              DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+
+ Copyright (C) 2018 Achmadi S.T.
+
+ Everyone is permitted to copy and distribute verbatim or modified
+ copies of this license document, and changing it is allowed as long
+ as the name is changed.
+
+            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+
+  0. You just DO WHAT THE FUCK YOU WANT TO.
+ */
+
+/**
+ * @file    din_mpu.c
+ * @brief   MPU Sensor routine code.
+ *
+ * @addtogroup MPU60
+ * @{
+ */
+
 #include "din_mpu.h"
 
 /////////////////////////////////////// Rutin MPU60x0 (hasil nyolong kerjaan orang) ////////////////
 
-float ax,ay,az,mag;
-float rangePerDigit = .000061f; //2G
+/**
+ * @brief   Global variable for Accel vector X.
+ */
+float ax;
 
+/**
+ * @brief   Global variable for Accel vector Y.
+ */
+float ay;
+
+/**
+ * @brief   Global variable for Accel vector Z.
+ */
+float az;
+
+/**
+ * @brief   Global variable for Accel vector Magnitude.
+ */
+float mag;
+
+/**
+ * @brief   Global variable for Normalization at 2G.
+ */
+float rangePerDigit = .000061f;
+
+/**
+ * @brief   Global variable for Sample Rate Divisor.
+ */
 static u_int8_t smplrt_div= 0;
+
+/**
+ * @brief   Global variable for MPU Configuration.
+ */
 static u_int8_t mpu_config = 0;
+
+/**
+ * @brief   Global variable for Gyro Configuration.
+ */
 static u_int8_t gyro_config = 0;
+
+/**
+ * @brief   Global variable for Accel Configuration.
+ */
 static u_int8_t accel_config = 0;
+
+/**
+ * @brief   Global variable for User Control Configuration.
+ */
 static u_int8_t user_control = 0x00;
+
+/**
+ * @brief   Global variable for Power Management.
+ */
 static u_int8_t power_mgmt1 = 0x00;
+
 //static u_int8_t fifo_enable = 0x00;
 //static u_int8_t int_pin_config = 0x00;
 //static u_int8_t int_pin_enable = 0x00;
@@ -18,9 +87,10 @@ static u_int8_t power_mgmt1 = 0x00;
 //static u_int8_t power_mgmt2  = 0x00;
 //static u_int8_t aux_vddio = 0x00;
 
-/*
- * This function defines value for SMPRT_DIV register.
- * Sample Rate = Gyroscope Output Rate / (1 + SMPLRT_DIV)
+/**
+ * @brief   Defines value for SMPRT_DIV register.
+ * @note    Sample Rate = Gyroscope Output Rate / (1 + SMPLRT_DIV)
+ * @param[in] samplerate_divisor value of divisor
  */
 static u_int8_t d_mpu_setSampleRate(u_int8_t samplerate_divisor){
     smplrt_div = samplerate_divisor;
@@ -30,10 +100,10 @@ static u_int8_t d_mpu_setSampleRate(u_int8_t samplerate_divisor){
     return smplrt_div;
 }
 
-/*
- * This function sets value for CONFIG register. This register controls FSYNC and bandwidth of gyro and
- * accelerometer.
- * Typical function call: set_mpu_config_register(EXT_SYNC_SET0, DLPF_CFG0);
+/**
+ * @brief   Defines register controls FSYNC and bandwidth of gyro and accelerometer.
+ * @param[in] ext_sync_set typical @see EXT_SYNC_SET0
+ * @param[in] dlpf_cfg typical @see DLPF_CFG0
  */
 static u_int8_t d_mpu_configRegister(u_int8_t ext_sync_set, u_int8_t dlpf_cfg){
     mpu_config = 0x00;
@@ -44,10 +114,12 @@ static u_int8_t d_mpu_configRegister(u_int8_t ext_sync_set, u_int8_t dlpf_cfg){
     return mpu_config;
 }
 
-/*
- * This function defines value for GYRO_CONFIG register. This register controls
- * self test and  range of gyroscopes.
- * Typical function call: set_mpu_gyro(XG_ST_EN, YG_ST_EN, ZG_ST_EN, FS_SEL250)
+/**
+ * @brief   Defines register controls self test and  range of gyroscopes.
+ * @param[in] xgyro_st typical @see XG_ST_EN
+ * @param[in] ygyro_st typical @see YG_ST_EN
+ * @param[in] zgyro_st typical @see ZG_ST_EN
+ * @param[in] gyro_range typical @see FS_SEL250
  */
 static u_int8_t d_mpu_setGyro(u_int8_t xgyro_st, u_int8_t ygyro_st, u_int8_t zgyro_st, u_int8_t gyro_range){
     gyro_config = 0x00;
@@ -58,10 +130,13 @@ static u_int8_t d_mpu_setGyro(u_int8_t xgyro_st, u_int8_t ygyro_st, u_int8_t zgy
     return gyro_config;
 }
 
-/*
- * This function defines value for ACCEL_CONFIG register. This register controls
- * self test, accelerometer range and DHPF for accelerometer.
- * Typical function call: set_mpu_accel(XA_ST_EN/DIS, YA_ST_EN/DIS, ZA_ST_EN/DIS, AFS_SEL0, ACCEL_HPF0)
+/**
+ * @brief   Defines register controls self test, accelerometer range and DHPF for accelerometer.
+ * @param[in] xaccel_st typical @see XA_ST_EN or @see XA_ST_DIS
+ * @param[in] yaccel_st typical @see YA_ST_EN or @see YA_ST_DIS
+ * @param[in] zaccel_st typical @see ZA_ST_EN or @see ZA_ST_DIS
+ * @param[in] accel_range typical @see AFS_SEL0
+ * @param[in] dhpf_accel typical @see ACCEL_HPF0
  */
 static u_int8_t d_mpu_setAccel(u_int8_t xaccel_st, u_int8_t yaccel_st, u_int8_t zaccel_st, u_int8_t accel_range, u_int8_t dhpf_accel){
     accel_config = 0x00;
@@ -125,9 +200,14 @@ static u_int8_t d_mpu_setAccel(u_int8_t xaccel_st, u_int8_t yaccel_st, u_int8_t 
 //    return signal_path_reset;
 //}
 
-/*
- * This function defines value for USER_CTRL register.
- * Typical Function Call: set_mpu_user_control(USER_FIFO_EN/DIS,I2C_MST_EN/DIS,I2C_IF_EN/DIS,FIFO_RESET_EN/DIS,I2C_MST_RESET_EN/DIS,SIG_COND_RESET_EN/DIS);
+/**
+ * @brief   Defines value for USER_CTRL register.
+ * @param[in] fifo_operation typical @see USER_FIFO_EN or @see USER_FIFO_DIS
+ * @param[in] aux_i2c typical @see I2C_MST_EN or @see I2C_MST_DIS
+ * @param[in] bus_select typical @see I2C_IF_EN or @see I2C_IF_DIS
+ * @param[in] fifo_reset typical @see FIFO_RESET_EN or @see FIFO_RESET_DIS
+ * @param[in] i2c_reset typical @see I2C_MST_EN or @see I2C_MST_DIS
+ * @param[in] signal_cond_reset typical @see SIG_COND_RESET_EN or @see SIG_COND_RESET_DIS
  */
 static u_int8_t d_mpu_userControl(u_int8_t fifo_operation, u_int8_t aux_i2c, u_int8_t bus_select, u_int8_t fifo_reset, u_int8_t i2c_reset, u_int8_t signal_cond_reset){
     user_control = 0x00;
@@ -138,11 +218,13 @@ static u_int8_t d_mpu_userControl(u_int8_t fifo_operation, u_int8_t aux_i2c, u_i
     return user_control;
 }
 
-/*
- * This fucntion defines value for PWR_MGMT_1 register. This register controls device reset, sleep mode, cycle
- * between different mode and clock source.
- * Typical Function Call: set_mput_power_mgmt1(DEVICE_RESET_EN/DIS, SLEEP_EN/DIS, CYCLE_EN/DIS, TEMPERATURE_EN/DIS, CLKSEL_XG)
- *
+/**
+ * @brief   Defines register device reset, sleep mode, cycle between different mode and clock source.
+ * @param[in] device_reset typical @see DEVICE_RESET_EN or @see DEVICE_RESET_DIS
+ * @param[in] sleep typical @see SLEEP_EN or @see SLEEP_DIS
+ * @param[in] cycle typical @see CYCLE_EN or @see CYCLE_DIS
+ * @param[in] temperature typical @see TEMPERATURE_EN or @see TEMPERATURE_DIS
+ * @param[in] clock_source typical @see CLKSEL_EN or @see CLKSEL_DIS
  */
 static u_int8_t d_mpu_powerMGMT1(u_int8_t device_reset, u_int8_t sleep, u_int8_t cycle, u_int8_t temperature, u_int8_t clock_source){
     power_mgmt1 = 0x00;
@@ -153,8 +235,8 @@ static u_int8_t d_mpu_powerMGMT1(u_int8_t device_reset, u_int8_t sleep, u_int8_t
     return power_mgmt1;
 }
 
-/*
- * This function writes value of sampling rate into SMPRT_DIV register.
+/**
+ * @brief   Write to @see SMPRT_DIV register
  */
 static void d_mpu_writeSampleRate(void){
      d_mpu_i2cWrite(SMPRT_DIV, smplrt_div);
@@ -167,22 +249,22 @@ static void d_mpu_writeSampleRate(void){
 //    d_mpu_i2cWrite(CONFIG, mpu_config);
 //}
 
-/*
- * This function writes value of gyro_config into GYRO_CONFIG register.
+/**
+ * @brief   Write to @see GYRO_CONFIG register
  */
 static void d_mpu_writeGyro(void){
     d_mpu_i2cWrite(GYRO_CONFIG, gyro_config);
 }
 
-/*
- * This function writes value of accel_config into ACCEL_CONFIG register.
+/**
+ * @brief   Write to @see ACCEL_CONFIG register
  */
 static void d_mpu_writeAccel(void){
     d_mpu_i2cWrite(ACCEL_CONFIG, accel_config);
 }
 
-/*
- * This function writes value of power_mgmt1 into PWR_MGMT_1 register.
+/**
+ * @brief   Write to @see POWER_MGMT1 register
  */
 static void d_mpu_writePowerMGMT1(void){
     d_mpu_i2cWrite(PWR_MGMT_1, power_mgmt1);
@@ -195,8 +277,10 @@ static void d_mpu_writePowerMGMT1(void){
 //    d_mpu_i2cWrite(USER_CTRL, user_control);
 //}
 
-/*
- * Call to ChibiOS I2C function.
+/**
+ * @brief   Write to I2C bus
+ * @param[in] addr Address to write
+ * @param[in] value Value to write
  */
 void d_mpu_i2cWrite(u_int8_t addr, u_int8_t value){
     u_int8_t mpu_txbuf[10], mpu_rxbuf[10];
@@ -214,17 +298,14 @@ void d_mpu_i2cWrite(u_int8_t addr, u_int8_t value){
     chThdSleepMilliseconds(100);
 }
 
-/*
- * This function reads data from MPU60X0.
- * Input is register address and lenght of buffer to be read.
- *
- * First three values are accelerometer.
- * Fourth one is temperature sensor.
- * Last three are gyro values.
- *
- * Havent explored FIFO and interrupt part yet.
- *
- * For this part addr = 0x3B and length = 14.
+/**
+ * @brief   Write then Read to/from I2C bus
+ * @param[in] addr Address to write. Typical 0x3B
+ * @param[in] length Length of response. Typical 14
+ * @note First three values are accelerometer.
+ * @note Fourth one is temperature sensor.
+ * @note Last three are gyro values.
+ * @note Havent explored FIFO and interrupt part yet.
  */
 void d_mpu_i2cReadData(u_int8_t addr, u_int8_t length){
     u_int8_t mpu_txbuf[20], mpu_rxbuf[20], i = 0;
@@ -260,16 +341,30 @@ void d_mpu_i2cReadData(u_int8_t addr, u_int8_t length){
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @brief   I2C Config Variable
+ */
 static const I2CConfig i2cfg = {
     OPMODE_I2C,
     400000,
     FAST_DUTY_CYCLE_2,
 };
 
+/**
+ * @brief   Write to I2C bus
+ * @param[in] vx Value of Accel at vector X
+ * @param[in] vy Value of Accel at vector Y
+ * @param[in] vz Value of Accel at vector Z
+ * @return Magnitude of vector resultant
+ */
 float d_mpu_vectorMag(float vx, float vy, float vz){
     return sqrt( pow(vx,2) + pow(vy,2) + pow(vz,2) );
 }
 
+/**
+ * @brief   Test ID of MPU60
+ * @note    result must be either 0x68 or 0x69
+ */
 void d_mpu_whoAmI(void){
     u_int8_t tx_buff[8];
     u_int8_t rx_buff[8];
@@ -314,6 +409,9 @@ static THD_FUNCTION(thdMPU, arg) {
     }
 }
 
+/**
+ * @brief   Setup for MPU60 module
+ */
 void d_mpu_setup(void){
     d_mpu_setSampleRate(9);
     d_mpu_configRegister(EXT_SYNC_SET0,DLPF_CFG0);
@@ -328,6 +426,9 @@ void d_mpu_setup(void){
     d_mpu_writeSampleRate();
 }
 
+/**
+ * @brief   Start I2C Peripheral and MPU60 module
+ */
 void d_mpu_start(void){
     palSetPadMode(GPIOB, 10, PAL_MODE_STM32_ALTERNATE_OPENDRAIN );   /* SCL */
     palSetPadMode(GPIOB, 11, PAL_MODE_STM32_ALTERNATE_OPENDRAIN );   /* SDA */
@@ -342,3 +443,4 @@ void d_mpu_start(void){
     chThdSleepMilliseconds(200);
     chThdCreateStatic(waMPU, sizeof(waMPU), NORMALPRIO, thdMPU, NULL);
 }
+/** @} */

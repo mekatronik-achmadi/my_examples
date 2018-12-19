@@ -13,6 +13,14 @@
   0. You just DO WHAT THE FUCK YOU WANT TO.
  */
 
+/**
+ * @file    din_mpu.h
+ * @brief   MPU Sensor routine header.
+ *
+ * @addtogroup MPU60
+ * @{
+ */
+
 #ifndef DIN_ACCEL_H
 #define DIN_ACCEL_H
 
@@ -28,7 +36,18 @@
 
 #include "reg_mpu.h"
 
+
+/**
+ * @brief   Enable MPU notification at SD1
+ */
 #define MPU_DEBUG   FALSE
+
+
+/**
+ * @brief   MPU60 I2C address
+ * @note    For AD0 to GND or NC, use @see MPU_ADDR_LO
+ * @note    For AD0 to VCC, use @see MPU_ADDR_HI
+ */
 #define MPU_ADDR    MPU_ADDR_LO
 
 void d_mpu_start(void);
@@ -40,3 +59,4 @@ void d_mpu_i2cReadData(u_int8_t addr, u_int8_t length);
 float d_mpu_vectorMag(float vx, float vy, float vz);
 
 #endif // DIN_ACCEL_H
+/** @} */

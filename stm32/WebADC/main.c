@@ -1,3 +1,26 @@
+/*
+              DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+
+ Copyright (C) 2018 Achmadi S.T.
+
+ Everyone is permitted to copy and distribute verbatim or modified
+ copies of this license document, and changing it is allowed as long
+ as the name is changed.
+
+            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+
+  0. You just DO WHAT THE FUCK YOU WANT TO.
+ */
+
+/**
+ * @file    main.c
+ * @brief   Main routine code.
+ *
+ * @addtogroup Main
+ * @{
+ */
+
 #include "ch.h"
 #include "hal.h"
 
@@ -19,6 +42,9 @@ static THD_FUNCTION(thdLED, arg) {
     }
 }
 
+/**
+ * @brief  All Main function.
+ */
 int main(void) {
 
   halInit();
@@ -45,3 +71,4 @@ int main(void) {
     d_web_term();
   }
 }
+/** @} */

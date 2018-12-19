@@ -31,12 +31,12 @@ extern float ax,ay,az,mag;
  */
 static thread_t *shelltp = NULL;
 
-
-#if SERVER_NOTIF
+/**
+ * @brief   Server request notification to SD1.
+ */
 static void request_notif(u_int8_t chan){
     chprintf((BaseSequentialStream *)&SD1,"%i: %4i:%5.2f:%5.2f:%5.2f:%5.2\r\n",chan,adc0,ax,ay,az,mag);
 }
-#endif
 
 /**
  * @brief   Text sending function.
