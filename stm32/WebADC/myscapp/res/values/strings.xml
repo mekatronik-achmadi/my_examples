@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">myscapp</string>
     <string name="btnReq">Test Request</string>
+    <string name="copyright">written by: Achmadi S.T.@2018</string>
 </resources>

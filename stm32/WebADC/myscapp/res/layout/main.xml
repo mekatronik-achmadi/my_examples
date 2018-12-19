@@ -20,9 +20,8 @@
             android:layout_height="50dp"
             android:text="@string/btnReq"
             android:id="@+id/btnReq"
-            android:layout_marginTop="51dp"
-            android:layout_below="@+id/txtOut"
-            android:layout_toStartOf="@+id/txtAz"/>
+            android:layout_marginTop="41dp"
+            android:layout_below="@+id/txtOut" android:layout_alignStart="@+id/txtAx"/>
 
     <TextView
             android:layout_width="360dp"
@@ -61,5 +60,13 @@
               android:layout_alignBaseline="@+id/txtAx"
               android:layout_alignBottom="@+id/txtAx"
               android:layout_alignStart="@+id/txtOut"/>
+    <TextView
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/copyright"
+            android:id="@+id/lblCopyright"
+            android:layout_alignEnd="@+id/txtOut" android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/btnReq" android:gravity="right"/>
 </RelativeLayout>
 
