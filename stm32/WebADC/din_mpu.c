@@ -2,7 +2,7 @@
 
 /////////////////////////////////////// Rutin MPU60x0 (hasil nyolong kerjaan orang) ////////////////
 
-float ax,ay,az;
+float ax,ay,az,mag;
 float rangePerDigit = .000061f; //2G
 
 static u_int8_t smplrt_div= 0;
@@ -248,6 +248,7 @@ void d_mpu_i2cReadData(u_int8_t addr, u_int8_t length){
     ax = mpu_val[0] * rangePerDigit * 9.80665f;
     ay = mpu_val[1] * rangePerDigit * 9.80665f;
     az = mpu_val[2] * rangePerDigit * 9.80665f;
+    mag = d_mpu_vectorMag(ax,ay,az);
 
 #if MPU_DEBUG
     chprintf((BaseSequentialStream *)&SD1, "Result:");
@@ -264,6 +265,10 @@ static const I2CConfig i2cfg = {
     400000,
     FAST_DUTY_CYCLE_2,
 };
+
+float d_mpu_vectorMag(float vx, float vy, float vz){
+    return sqrt( pow(vx,2) + pow(vy,2) + pow(vz,2) );
+}
 
 void d_mpu_whoAmI(void){
     u_int8_t tx_buff[8];

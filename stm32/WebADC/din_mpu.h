@@ -37,5 +37,6 @@ void d_mpu_whoAmI(void);
 
 void d_mpu_i2cWrite(u_int8_t addr, u_int8_t value);
 void d_mpu_i2cReadData(u_int8_t addr, u_int8_t length);
+float d_mpu_vectorMag(float vx, float vy, float vz);
 
 #endif // DIN_ACCEL_H

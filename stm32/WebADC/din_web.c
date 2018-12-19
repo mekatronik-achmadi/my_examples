@@ -24,19 +24,26 @@
 #include "din_web.h"
 
 extern adcsample_t adc0;
-extern float ax,ay,az;
+extern float ax,ay,az,mag;
 
 /**
  * @brief   Shell handler variable.
  */
 static thread_t *shelltp = NULL;
 
+
+#if SERVER_NOTIF
+static void request_notif(u_int8_t chan){
+    chprintf((BaseSequentialStream *)&SD1,"%i: %4i:%5.2f:%5.2f:%5.2f:%5.2\r\n",chan,adc0,ax,ay,az,mag);
+}
+#endif
+
 /**
  * @brief   Text sending function.
  */
 static void text_http(void){
     chThdSleepMilliseconds(100);
-    chprintf((BaseSequentialStream *)&SD2,"%4i:%5.2f:%5.2f:%5.2f\r\n",adc0,ax,ay,az);
+    chprintf((BaseSequentialStream *)&SD2,"%4i:%5.2f:%5.2f:%5.2f:%5.2f\r\n",adc0,ax,ay,az,mag);
     chThdSleepMilliseconds(100);
     chprintf((BaseSequentialStream *)&SD2,"\r\n");
     chThdSleepMilliseconds(100);
@@ -52,9 +59,9 @@ static void cmd_send0(BaseSequentialStream *chp, int argc, char *argv[]) {
   (void)chp;
 
 #if SERVER_NOTIF
-    chprintf((BaseSequentialStream *)&SD1,"0: %4i:%5.2f:%5.2f:%5.2f\r\n",adc0,ax,ay,az);
+    request_notif(0);
 #endif
-  chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=0,22\r\n");
+  chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=0,28\r\n");
   text_http();
   chprintf((BaseSequentialStream *)&SD2,"AT+CIPCLOSE=0\r\n");
 }
@@ -69,9 +76,9 @@ static void cmd_send1(BaseSequentialStream *chp, int argc, char *argv[]) {
     (void)chp;
 
 #if SERVER_NOTIF
-    chprintf((BaseSequentialStream *)&SD1,"1: %4i:%5.2f:%5.2f:%5.2f\r\n",adc0,ax,ay,az);
+    request_notif(1);
 #endif
-    chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=1,22\r\n");
+    chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=1,28\r\n");
     text_http();
     chprintf((BaseSequentialStream *)&SD2,"AT+CIPCLOSE=1\r\n");
 }
@@ -86,9 +93,9 @@ static void cmd_send2(BaseSequentialStream *chp, int argc, char *argv[]) {
     (void)chp;
 
 #if SERVER_NOTIF
-    chprintf((BaseSequentialStream *)&SD1,"2: %4i:%5.2f:%5.2f:%5.2f\r\n",adc0,ax,ay,az);
+    request_notif(2);
 #endif
-    chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=2,22\r\n");
+    chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=2,28\r\n");
     text_http();
     chprintf((BaseSequentialStream *)&SD2,"AT+CIPCLOSE=2\r\n");
 }
@@ -103,9 +110,9 @@ static void cmd_send3(BaseSequentialStream *chp, int argc, char *argv[]) {
     (void)chp;
 
 #if SERVER_NOTIF
-    chprintf((BaseSequentialStream *)&SD1,"03 %4i:%5.2f:%5.2f:%5.2f\r\n",adc0,ax,ay,az);
+    request_notif(3);
 #endif
-    chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=3,22\r\n");
+    chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=3,28\r\n");
     text_http();
     chprintf((BaseSequentialStream *)&SD2,"AT+CIPCLOSE=3\r\n");
 }
@@ -120,9 +127,9 @@ static void cmd_send4(BaseSequentialStream *chp, int argc, char *argv[]) {
     (void)chp;
 
 #if SERVER_NOTIF
-    chprintf((BaseSequentialStream *)&SD1,"4: %4i:%5.2f:%5.2f:%5.2f\r\n",adc0,ax,ay,az);
+    request_notif(4);
 #endif
-    chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=4,22\r\n");
+    chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=4,28\r\n");
     text_http();
     chprintf((BaseSequentialStream *)&SD2,"AT+CIPCLOSE=4\r\n");
 }
@@ -137,9 +144,9 @@ static void cmd_send5(BaseSequentialStream *chp, int argc, char *argv[]) {
     (void)chp;
 
 #if SERVER_NOTIF
-    chprintf((BaseSequentialStream *)&SD1,"5: %4i:%5.2f:%5.2f:%5.2f\r\n",adc0,ax,ay,az);
+    request_notif(5);
 #endif
-    chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=5,22\r\n");
+    chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=5,28\r\n");
     text_http();
     chprintf((BaseSequentialStream *)&SD2,"AT+CIPCLOSE=5\r\n");
 }
@@ -154,9 +161,9 @@ static void cmd_send6(BaseSequentialStream *chp, int argc, char *argv[]) {
     (void)chp;
 
 #if SERVER_NOTIF
-    chprintf((BaseSequentialStream *)&SD1,"6: %4i:%5.2f:%5.2f:%5.2f\r\n",adc0,ax,ay,az);
+    request_notif(6);
 #endif
-    chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=6,22\r\n");
+    chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=6,28\r\n");
     text_http();
     chprintf((BaseSequentialStream *)&SD2,"AT+CIPCLOSE=6\r\n");
 }
@@ -171,9 +178,9 @@ static void cmd_send7(BaseSequentialStream *chp, int argc, char *argv[]) {
     (void)chp;
 
 #if SERVER_NOTIF
-    chprintf((BaseSequentialStream *)&SD1,"7: %4i:%5.2f:%5.2f:%5.2f\r\n",adc0,ax,ay,az);
+    request_notif(7);
 #endif
-    chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=7,22\r\n");
+    chprintf((BaseSequentialStream *)&SD2,"AT+CIPSEND=7,28\r\n");
     text_http();
     chprintf((BaseSequentialStream *)&SD2,"AT+CIPCLOSE=7\r\n");
 }

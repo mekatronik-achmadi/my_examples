@@ -1,7 +1,7 @@
 #include "din_fuzzy.h"
 
 extern adcsample_t adc0;
-extern float ax,ay,az;
+extern float ax,ay,az,mag;
 
 static float f_accel[3];
 static float f_mic[3];
@@ -151,7 +151,7 @@ static u_int16_t Decision(unsigned int index){
 }
 
 u_int16_t d_fuzzy(void){
-    Accel(ax);
+    Accel(mag);
     Mic(adc0);
 
     return Decision(Evaluasi());
