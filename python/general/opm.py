@@ -14,6 +14,8 @@ import sys
 import time
 from ThorlabsPM100 import ThorlabsPM100, USBTMC
 
+import subprocess as sp
+
 class Plot2D():
     def __init__(self):
         self.traces = dict()
@@ -26,7 +28,7 @@ class Plot2D():
 
         self.win = pg.GraphicsWindow(title="Basic OPM plotting")
         self.win.resize(1000,600)
-        self.win.setWindowTitle('Category: Safe')        
+        self.win.setWindowTitle('Category: safe')        
 
         self.canvas = self.win.addPlot(title="Wavelength: 1550nm")
 
@@ -65,6 +67,14 @@ if __name__ == '__main__':
         global p, x, y
         y = np.roll(y,1,axis=0)
         y[0] = opm.read
+        dy = abs(y[0] - y[1])
+        
+        if(dy <= 0.000005):
+            p.win.setWindowTitle('Category: safe')
+        else:
+            p.win.setWindowTitle('Category: UNSAFE')
+            sp.Popen([sys.executable, 'opm_alert.py'])
+            
         p.trace("data",x,y)
 
     timer = QtCore.QTimer()
