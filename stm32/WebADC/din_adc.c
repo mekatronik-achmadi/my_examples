@@ -67,7 +67,7 @@ static THD_FUNCTION(thdADC, arg) {
 
     chRegSetThreadName("ADC Conversion");
     while (true) {
-        chThdSleepMilliseconds(100);
+        chThdSleepMicroseconds(10);
         adcStartConversion(&ADCD1, &adcgrpcfg, samples, ADC_GRP_BUF_DEPTH);
     }
 }

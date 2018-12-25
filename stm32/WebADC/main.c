@@ -30,6 +30,9 @@
 #include "din_mpu.h"
 #include "din_fuzzy.h"
 
+extern adcsample_t adc0;
+extern float ax,ay,az,mag;
+
 static THD_WORKING_AREA(waLED, 128);
 static THD_FUNCTION(thdLED, arg) {
 
@@ -51,7 +54,7 @@ int main(void) {
   chSysInit();
 
   d_adc_start();
-  d_web_start();
+//  d_web_start();
   d_uart_start();
   d_uart_info();
   d_mpu_start();
@@ -67,8 +70,9 @@ int main(void) {
   chThdSleepMilliseconds(200);
 
   while(true){
-    chThdSleepMilliseconds(100);
-    d_web_term();
+    chThdSleepMilliseconds(1);
+    chprintf((BaseSequentialStream *)&SD1,"%4i,%5.2f,%5.2f,%5.2f,%5.2f\r\n",adc0,ax,ay,az,mag);
+//    d_web_term();
   }
 }
 /** @} */

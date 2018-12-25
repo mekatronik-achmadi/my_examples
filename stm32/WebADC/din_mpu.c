@@ -333,7 +333,7 @@ void d_mpu_i2cReadData(u_int8_t addr, u_int8_t length){
 
 #if MPU_DEBUG
     chprintf((BaseSequentialStream *)&SD1, "Result:");
-    chprintf((BaseSequentialStream *)&SD1, "\t%5.2f\t%5.2f\t%5.2f",ax,ay,az);
+    chprintf((BaseSequentialStream *)&SD1, "\t%5.2f\t%5.2f\t%5.2f\t%5.2f",ax,ay,az,mag);
     chprintf((BaseSequentialStream *)&SD1, "\r\n");
 #endif
 
@@ -405,7 +405,7 @@ static THD_FUNCTION(thdMPU, arg) {
     chRegSetThreadName("MPU Sensing");
     while (true) {
         d_mpu_i2cReadData(0x3B, 14);
-        chThdSleepMilliseconds(200);
+        chThdSleepMicroseconds(10);
     }
 }
 

@@ -40,7 +40,7 @@
 /**
  * @brief   Notification Message.
  */
-#define SERVER_NOTIF TRUE
+#define SERVER_NOTIF FALSE
 
 /*
  * Definisi ukuran standar alokasi memori untuk thread dan shell
