@@ -8,7 +8,7 @@ F_CPU = 8000000
 PROJECT = main
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = main.c alcd.c uart.c led.c
+SRC = main.c alcd.c
 
 ######################################################################################################################################
 
