@@ -1,0 +1,20 @@
+#!/usr/bin/python
+
+from uul_FRecog import UulFaceRec
+from datetime import datetime
+from os import path
+
+list_nama = ["mas_Brewok", "mas_Mulus"]
+
+filenm = "lbph_train_" + datetime.now().strftime("%d%m%y_%H%M") + ".yml"
+
+fc = UulFaceRec("lbph",list_nama)
+
+aface, alabel = fc.prepare_train('mydata/training')
+fc.training(aface,alabel)
+
+if path.exists(filenm):
+    print("file %s sudah ada" % filenm)
+else:
+    fc.save_train(filenm)
+    print("training disimpan di %s" % filenm)
