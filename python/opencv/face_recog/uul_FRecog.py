@@ -8,13 +8,18 @@ import numpy as np
 class UulFaceRec:
 
     dir_pre = "u"
-    face_recog = None
     allmetode = ["lbph","fisher","eigen"]
 
-    def __init__(self,cara,lstnama):
+    def __init__(self,cara,lstnama,haarfile):
         self.nama = [""] + lstnama
 
         self.metode = cara
+        
+        if os.path.exists(haarfile):
+            self.haarcas = haarfile
+        else:
+            print("file deteksi %s tidak ada" % haarfile)
+            sys.exit()
 
         if self.metode == "lbph":
             self.face_recog = cv2.face.LBPHFaceRecognizer_create()
@@ -32,7 +37,7 @@ class UulFaceRec:
 
     def face_detect(self,img):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        f_cas = cv2.CascadeClassifier('cascade/haarcascade_frontalface_alt.xml')
+        f_cas = cv2.CascadeClassifier(self.haarcas)
         face = f_cas.detectMultiScale(gray,scaleFactor=1.2,minNeighbors=5)
 
         if(len(face)==0):

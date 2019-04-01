@@ -4,10 +4,10 @@ from uul_FRecog import UulFaceRec
 from os import path
 
 list_nama = ["mas_Brewok", "mas_Mulus"]
-
+haar = "haarcascade_frontalface_alt.xml"
 filenm = "lbph_train_310319_1045"  + ".yml"
 
-fc = UulFaceRec("lbph",list_nama)
+fc = UulFaceRec("lbph",list_nama,haar)
 
 if path.exists(filenm):
     fc.load_train(filenm)

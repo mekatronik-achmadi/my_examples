@@ -3,8 +3,9 @@
 from uul_FRecog import UulFaceRec
 
 list_nama = ["mas_Brewok", "mas_Mulus"]
+haar = "haarcascade_frontalface_alt.xml"
 
-fc = UulFaceRec("lbph",list_nama)
+fc = UulFaceRec("lbph",list_nama,haar)
 
 aface, alabel = fc.prepare_train('mydata/training')
 fc.training(aface,alabel)

@@ -5,10 +5,10 @@ from datetime import datetime
 from os import path
 
 list_nama = ["mas_Brewok", "mas_Mulus"]
-
+haar = "haarcascade_frontalface_alt.xml"
 filenm = "lbph_train_" + datetime.now().strftime("%d%m%y_%H%M") + ".yml"
 
-fc = UulFaceRec("lbph",list_nama)
+fc = UulFaceRec("lbph",list_nama,haar)
 
 aface, alabel = fc.prepare_train('mydata/training')
 fc.training(aface,alabel)
