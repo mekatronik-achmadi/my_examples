@@ -105,3 +105,11 @@ class UulFaceRec:
 
     def load_train(self,file_path):
         self.face_recog.read(file_path)
+        
+    def analisa(self):
+        eig = self.face_recog.getEigenValues()
+        eigv = self.face_recog.getEigenVectors()
+        eigm = self.face_recog.getMean()
+        eigprj = self.face_recog.getProjections()
+        
+        return eig,eigv,eigm,eigprj
