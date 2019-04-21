@@ -113,7 +113,7 @@ int main (void){
         sprintf(txtLCD,"TA mumet"); // tampilkan ADC ke ALCD
         alcd_printf(0,0,txtLCD);
 
-        sprintf(txtLCD, "ADC:%3i T:%6i",vADC,period); // tampilkan vI dan Freq ke ALCD
+        sprintf(txtLCD, "ADC:%3i T:%6i",vADC,period); // tampilkan period ke ALCD
         alcd_printf(0,1,txtLCD);
 
         printf("ADC:%3i T:%6i",vADC,period); // kirim semua nilai ke Serial
