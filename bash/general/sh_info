@@ -13,18 +13,18 @@ cat << !
 
 echo ""
 echo "Kernel Info: "
-echo "Name    : $(uname -s)"
-echo "Node    : $(uname -n)"
-echo "Release : $(uname -r)"
-echo "Version : $(uname -v)"
-echo "System  : $(uname -o)"
-echo "Machine : $(uname -m)"
+echo "Name     : $(uname -s)"
+echo "Release  : $(uname -r)"
+echo "Version  : $(uname -v)"
+echo "System   : $(uname -o)"
+echo "Machine  : $(uname -m)"
+echo "Hostname : $(uname -n)"
 
 echo ""
 echo "Shell Info:"
-echo "Type    : $SHELL"
-echo "User    : $USER"
-echo "Console : $(tty)"
+echo "Type     : $SHELL"
+echo "User     : $USER"
+echo "Console  : $(tty)"
 
 echo ""
 df -h -T
