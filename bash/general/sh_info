@@ -22,9 +22,9 @@ echo "Machine : $(uname -m)"
 
 echo ""
 echo "Shell Info:"
-echo "Terminal : $TERM"
-echo "Type     : $SHELL"
-echo "User     : $USER"
+echo "Type    : $SHELL"
+echo "User    : $USER"
+echo "Console : $(tty)"
 
 echo ""
 df -h -T
