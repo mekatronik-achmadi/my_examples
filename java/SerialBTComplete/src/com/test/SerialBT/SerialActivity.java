@@ -39,7 +39,7 @@ public class SerialActivity extends Activity implements AdapterView.OnItemSelect
     private StringBuilder stb = new StringBuilder();
     Handler hRecieve;
     connThread connThd;
-    String endline = "\n";
+    String endline = "\r\n";
 
     Button btnConnect;
     Button btnClear;
