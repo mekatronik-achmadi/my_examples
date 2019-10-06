@@ -13,11 +13,10 @@ blinky-0x00000.bin: blinky
 blinky: blinky.o
 
 blinky.o: blinky.c
-	touch user_config.h
 
 flash: blinky-0x00000.bin
 	sudo esptool -p /dev/ttyUSB0 erase_flash
 	sudo esptool -p /dev/ttyUSB0 write_flash 0x3e000 $(BLANKBIN) 0x3fc000 $(INITBIN) 0x3fe000 $(BLANKBIN)
 	sudo esptool -p /dev/ttyUSB0 write_flash 0x00000 blinky-0x00000.bin 0x10000 blinky-0x10000.bin
 clean:
-	rm -f blinky blinky.o blinky-0x00000.bin blinky-0x10000.bin user_config.h
+	rm -f blinky blinky.o blinky-0x00000.bin blinky-0x10000.bin
