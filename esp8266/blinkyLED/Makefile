@@ -1,6 +1,6 @@
 CC = xtensa-lx106-elf-gcc
 CFLAGS = -I. -mlongcalls
-LDLIBS = -nostdlib -Wl,--start-group -lmain -lnet80211 -lwpa -llwip -lpp -lphy -lc -Wl,--end-group -lgcc
+LDLIBS = -nostdlib -Wl,--start-group -lmain -lnet80211 -lwpa -llwip -lpp -lphy -lc -Wl,--end-group -lgcc -ldriver
 LDFLAGS = -Teagle.app.v6.ld
 INITBIN = /opt/esp-open-sdk/ESP8266_NONOS_SDK-2.1.0-18-g61248df/bin/esp_init_data_default.bin
 BLANKBIN = /opt/esp-open-sdk/ESP8266_NONOS_SDK-2.1.0-18-g61248df/bin/blank.bin
