@@ -11,6 +11,9 @@
 
 #define SERVER_LOCAL_PORT         8080
 
+#define STR_REQ     0
+#define STR_DATA    1
+
 LOCAL struct espconn esp_conn;
 LOCAL esp_tcp esptcp;
 LOCAL os_timer_t ip_test_timer;
@@ -61,19 +64,90 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_sent_cb(void *arg){
     os_printf("tcp data sent\r\n");
 }
 
+LOCAL void ICACHE_FLASH_ATTR tcp_server_parse(char *strIN, char *strOUT){
+    char strInput[90];
+    char strSplit[3][30];
+    uint8 i,j,cnt;
+
+    os_strcpy(strInput,strIN);
+    j=0; cnt=0;
+    for(i=0;i<=os_strlen(strInput);i++){
+        if(strInput[i]==' ' || strInput[i]=='\0'){
+            strSplit[cnt][j]='\0';
+            cnt++;
+            j=0;
+        }
+        else {
+            if(strInput[i] != '/'){
+                strSplit[cnt][j]=strInput[i];
+                j++;
+            }
+        }
+    }
+
+    os_strcpy(strOUT,strSplit[1]);
+}
+
+LOCAL void ICACHE_FLASH_ATTR tcp_conf_parse(char *strIN, char *strOUT,uint8 num){
+    char strInput[90];
+    char strSplit[3][30];
+    uint8 i,j,cnt;
+
+    os_strcpy(strInput,strIN);
+    j=0; cnt=0;
+    for(i=0;i<=os_strlen(strInput);i++){
+        if(strInput[i]==' ' || strInput[i]=='\0' || strInput[i]=='='){
+            strSplit[cnt][j]='\0';
+            cnt++;
+            j=0;
+        }
+        else {
+            strSplit[cnt][j]=strInput[i];
+            j++;
+        }
+    }
+
+    os_strcpy(strOUT,strSplit[num]);
+}
+
 LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsigned short len){
     char *ptr = 0;
+    char txthtml[200];
+    char strRecv[64];
+    char strReq[32];
+    char password[64];
+    struct station_config stationConf;
 
     struct espconn *pespconn = arg;
     ptr = (char*) os_strstr(pusrdata,"\r\n");
     ptr[0] = '\0';
 
 // Define all HTTP request here
+    os_printf("tcp recv : %s\r\n", pusrdata);
     if (os_strcmp(pusrdata, "GET / HTTP/1.1") == 0){
         http_resp(pespconn,200,(char*)index_html);
     }
     else{
-        http_resp(pespconn,200,NULL);
+        tcp_server_parse(pusrdata,strRecv);
+        tcp_conf_parse(strRecv,strReq,STR_REQ);
+
+        if(os_strcmp("pass",strReq)==0){
+            tcp_conf_parse(strRecv,password,STR_DATA);
+            os_printf("new password: %s\r\n",password);
+
+            os_sprintf(txthtml,"new password: %s\r\n",password);
+            http_resp(pespconn,200,(char*)txthtml);
+
+            os_memset(stationConf.password, 0, 64);
+            stationConf.bssid_set = 0;
+
+            wifi_station_get_config(&stationConf);
+            os_memcpy(&stationConf.password, password, 64);
+            wifi_station_set_config(&stationConf);
+        }
+        else{
+            http_resp(pespconn,200,NULL);
+        }
     }
 }
 
@@ -135,16 +209,32 @@ void ICACHE_FLASH_ATTR user_esp_platform_check_ip(void){
 }
 
 void ICACHE_FLASH_ATTR user_set_station_conf(void){
-    char ssid[32] = "AchmadiGamePhone";
-    char password[64] = "abu_musa2015";
     struct station_config stationConf;
+    char ssid[32];
+    char password[64];
 
     os_memset(stationConf.ssid, 0, 32);
     os_memset(stationConf.password, 0, 64);
     stationConf.bssid_set = 0;
 
-    os_memcpy(&stationConf.ssid, ssid, 32);
-    os_memcpy(&stationConf.password, password, 64);
+    wifi_station_get_config(&stationConf);
+
+    if(os_strlen(stationConf.ssid)==0){
+        os_printf("Using default ssid\r\n");
+        os_strcpy(ssid,"AchmadiGamePhone");
+        os_memcpy(&stationConf.ssid, ssid, 32);
+    }else{
+        os_printf("Using previous ssid: %s\r\n",stationConf.ssid);
+    }
+
+    if(os_strlen(stationConf.password)==0){
+        os_printf("Using default password\r\n");
+        os_strcpy(password,"abu_musa2015");
+        os_memcpy(&stationConf.password, password, 64);
+    }else{
+        os_printf("Using previous password: %s\r\n",stationConf.password);
+    }
+
     wifi_station_set_config(&stationConf);
 
     os_timer_disarm(&ip_test_timer);
@@ -155,7 +245,6 @@ void ICACHE_FLASH_ATTR user_set_station_conf(void){
 void ICACHE_FLASH_ATTR user_init(){
     uart_init(SERIALBAUD, SERIALBAUD);
     os_printf("\nSDK version:%s\n", system_get_sdk_version());
-    os_printf("Serial Jalan OK\n");
 
     gpio_init();
     gpio16_output_conf();
