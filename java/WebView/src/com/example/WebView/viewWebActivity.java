@@ -25,7 +25,7 @@ public class viewWebActivity extends Activity {
     ProgressBar barLoad;
     ImageButton btnGo,btnBack,btnNext,btnStop,btnReload,btnHome;
 
-    String urlHome = "https://google.com";
+    String urlHome = "https://duckduckgo.com";
     String strURL;
     Handler chURL_hndl;
     Runnable chRUL_run;
@@ -83,6 +83,7 @@ public class viewWebActivity extends Activity {
                     }
                 }
             });
+
         }
 
         webView.setWebViewClient(myWebViewClient);
