@@ -83,7 +83,6 @@ public class viewWebActivity extends Activity {
                     }
                 }
             });
-
         }
 
         webView.setWebViewClient(myWebViewClient);
