@@ -18,6 +18,7 @@ void ICACHE_FLASH_ATTR user_init(){
 	uart_init(SERIALBAUD, SERIALBAUD);
 	os_printf("\nSDK version:%s\n", system_get_sdk_version());
 
+	gpio_init();
 	gpio_output_set(0, 0, (1 << 2), 0);
 	gpio16_output_conf();
 
