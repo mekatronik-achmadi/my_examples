@@ -303,6 +303,10 @@ uart_response(uint8 inChar){
                 for(i=0;i<100;i++){os_delay_us(10000);}
                 system_restart();
             }
+            else if(os_strcmp("sub",strReq)==0){
+                MQTT_Subscribe(&mqttClient, "hello/world", 0);
+                os_printf("MQTT Subscribed: hello/world \r\n");
+            }
             else if(os_strcmp("pub",strReq)==0){
                 MQTT_Publish(&mqttClient, "hello/world", "hello_esp8266", 13, 0, 0);
             }
