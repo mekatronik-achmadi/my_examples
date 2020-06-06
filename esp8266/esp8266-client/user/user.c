@@ -30,6 +30,7 @@
 #include "driver/uart.h"
 #include "driver/gpio16.h"
 
+#include "wifi_sta.h"
 #include "user_config.h"
 
 /**
