@@ -46,8 +46,14 @@ LOCAL uint8 blink_led = 0;
  * @brief LED-16 blinky handler
  */
 LOCAL void ICACHE_FLASH_ATTR blinky_timer_handler(void *prv){
-    if (blink_led==1) { gpio16_output_set(1); blink_led=0; }
-    else { gpio16_output_set(0); blink_led=1; }
+    if (blink_led==1) { 
+        gpio16_output_set(1);
+        gpio_output_set(0, BIT2, BIT2, 0);
+        blink_led=0; }
+    else {
+        gpio16_output_set(0);
+        gpio_output_set(BIT2, 0, BIT2, 0);
+        blink_led=1; }
 }
 
 /**
@@ -85,6 +91,9 @@ void ICACHE_FLASH_ATTR user_init(){
     print_os_info();
 
     gpio16_output_conf();
+    PIN_FUNC_SELECT(PERIPHS_IO_MUX_GPIO2_U, FUNC_GPIO2);
+    PIN_PULLUP_DIS(PERIPHS_IO_MUX_GPIO2_U);
+
     os_timer_setfn(&blinky_timer, (os_timer_func_t *)blinky_timer_handler, NULL);
     os_timer_arm(&blinky_timer, 500, 1);
 }
