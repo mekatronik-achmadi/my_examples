@@ -32,6 +32,7 @@ adb_uninstall com.miui.bugreport
 adb_uninstall com.miui.voiceassist
 adb_uninstall com.miui.yellowpage
 adb_uninstall com.miui.personalassistant
+adb_uninstall com.miui.klo.bugreport
 
 adb_uninstall com.mi.liveassistant
 adb_uninstall com.xiaomi.channel
