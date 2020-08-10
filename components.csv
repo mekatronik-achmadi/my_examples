@@ -23,7 +23,9 @@ PL2303,TTL-USB,Board,12
 ATMega8 Nano,Arduino,Board,1
 STM32F407VG,STM32,Chip Board,1
 MicroSD,SDCard,SDCard,4
-SDCARD Adapter,SDCard Adapter,Board,1
+MicroSD 10p,SDCard,SDCard,4
+MicroSD 8p,SDCard,SDCard,0
+SDCard Adapter,SDCard,Board,1
 DSO138,Oscilloscope,Board,1
 Jumper Pin,Jumper Pin,Pin,11
 Male Header,Header,Connector,-
