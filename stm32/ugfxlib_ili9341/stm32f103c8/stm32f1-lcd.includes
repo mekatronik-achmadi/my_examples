@@ -5,5 +5,3 @@
 /opt/stm32chlib/chibios30/os/hal/include
 /opt/stm32chlib/chibios30/os/hal/lib/streams
 disp
-board
-disp
