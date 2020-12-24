@@ -266,6 +266,8 @@ uart_response(uint8 inChar){
             "sleep "\
             "restart "\
             "sysinfo "\
+            "sub" \
+            "pub" \
             "help";
 
     if(inChar == '\n' || inChar == '\r'){
