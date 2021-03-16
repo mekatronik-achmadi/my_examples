@@ -56,9 +56,10 @@ class OCR():
         platno = re.sub(r'\W','',platno)
         print("detected number plate: ",platno)
 
-        img_crop = cv2.resize(img_crop,(400,200))
-
-        cv2.imshow('Number: %s' % platno,img)
+        winname = 'Number: %s' % platno
+        cv2.namedWindow(winname)
+        cv2.moveWindow(winname,10,160)
+        cv2.imshow(winname,img)
 
         cv2.waitKey(0)
         cv2.destroyAllWindows()
