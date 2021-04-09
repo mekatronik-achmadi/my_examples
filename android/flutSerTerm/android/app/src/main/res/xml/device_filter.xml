@@ -24,4 +24,7 @@
     <!-- 0x1366 / 0x0105: CH340 JLink -->
     <usb-device vendor-id="1A86" product-id="7523" />
 
+     <!-- 0x0483 / 0x5740: STMicroelectronic VCP -->
+    <usb-device vendor-id="0483" product-id="5740" />
+
 </resources>
