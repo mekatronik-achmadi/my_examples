@@ -27,6 +27,14 @@ time2 = time.time() - time1
 print("py running time in seconds:", time2)
 py_time = time2
 
+## Numpy part
+
+time1 = time.time()
+np_result = matrix.sum(axis=1,dtype=np.float64)
+time2 = time.time() - time1
+print("numpy running time in second:", time2)
+np_time = time2
+
 ## C part
 
 lib = cdll.LoadLibrary("./libcsum.so")
@@ -35,7 +43,7 @@ csum.restype = ndpointer(dtype=c_double,
                          shape=(n,))
 
 time1 = time.time()
-result = csum(c_void_p(matrix.ctypes.data),
+c_result = csum(c_void_p(matrix.ctypes.data),
               c_int(n),
               c_int(m))
 time2 = time.time() - time1
@@ -43,4 +51,12 @@ print("c  running time in seconds:", time2)
 c_time = time2
 
 ## Comparisson
-print("speedup:", round(py_time/c_time))
+
+print("Result:")
+print("Py Result: " + str(py_result))
+print("Np result:" + str(np_result))
+print("C result" + str(c_result))
+
+print("speedup:")
+print("Py vs C:", py_time/c_time)
+print("Np vs C:", np_time/c_time)
