@@ -1,9 +1,12 @@
 #include <gtk/gtk.h>
 
+typedef struct {} app_widgets;
+
 int main(int argc, char *argv[])
 {
     GtkBuilder *builder;
     GtkWidget *window;
+    app_widgets *widgets = g_slice_new(app_widgets);
 
     gtk_init(&argc, &argv);
 
@@ -17,8 +20,12 @@ int main(int argc, char *argv[])
     gtk_widget_show(window);
     gtk_main();
 
+    g_slist_free(app_widgets,widgets);
+
     return 0;
 }
+
+/*void dummy(GtkButton *button, app_widgets *app_wdgts){}*/
 
 void on_window_main_destroy(){
     gtk_main_quit();
