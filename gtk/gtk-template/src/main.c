@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     gtk_widget_show(window);
     gtk_main();
 
-    g_slist_free(app_widgets,widgets);
+    g_slice_free(app_widgets, widgets);
 
     return 0;
 }
